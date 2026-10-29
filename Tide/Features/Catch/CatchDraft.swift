@@ -34,6 +34,8 @@ final class CatchDraft {
         candidateConfidences.indices.contains(selectedIndex) ? candidateConfidences[selectedIndex] : nil
     }
 
+    var isClassifying = false
+
     func setPhoto(data: Data, now: Date = Date()) {
         imageData = data
         image = UIImage(data: data)
@@ -41,6 +43,17 @@ final class CatchDraft {
         metadata = meta
         capturedAt = meta.capturedAt ?? now
         photoLocation = meta.location
+    }
+
+    /// Vision で候補3つを出し、1つ目を選択する。
+    func classify() async {
+        guard let imageData else { return }
+        isClassifying = true
+        let result = await FishClassifier.classify(imageData)
+        isClassifying = false
+        candidates = result.map(\.species)
+        candidateConfidences = result.map(\.confidence)
+        selectedIndex = 0
     }
 
     func reset() {

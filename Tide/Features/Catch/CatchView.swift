@@ -49,6 +49,7 @@ struct CatchView: View {
             guard let pickerItem else { return }
             if let data = try? await pickerItem.loadTransferable(type: Data.self) {
                 draft.setPhoto(data: data)
+                await draft.classify()
             }
         }
     }

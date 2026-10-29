@@ -1,6 +1,8 @@
 import SwiftUI
 
 /// 付録A A-0 のトークン。画面はこの定数だけを使う（直書き禁止: SwiftLint `hex_color_outside_tokens`）。
+/// 指示書 §4 により1ファイルに集約する。
+// swiftlint:disable:next type_body_length
 enum DesignTokens {
     // MARK: - 色
 
@@ -344,6 +346,38 @@ enum DesignTokens {
         static let saveIconSize: CGFloat = 26
         static let saveIconLineWidth: CGFloat = 2.2
         static let savePadBottom: CGFloat = 24
+    }
+
+    // MARK: - 図鑑（A-5）
+
+    enum Zukan {
+        static let countFontSize: CGFloat = 22
+        static let totalFontSize: CGFloat = 12
+        static let countGap: CGFloat = 3
+        static let headerGap: CGFloat = 8
+        static let ringSize: CGFloat = 36
+        static let ringRadius: CGFloat = 15
+        static let ringLineWidth: CGFloat = 4
+        static let columns = 3
+        static let gap: CGFloat = 10
+        static let padTop: CGFloat = 14
+        static let cardHeight: CGFloat = 136
+        static let cardRadius: CGFloat = 22
+        static let cardGap: CGFloat = 10
+        static let silhouetteSize = CGSize(width: 70, height: 36)
+        static let silhouetteLineWidth: CGFloat = 1.6
+        static let lengthFontSize: CGFloat = 16
+        static let unitFontSize: CGFloat = 10
+        static let badgeTop: CGFloat = 10
+        static let badgeRight: CGFloat = 12
+        static let badgeMinWidth: CGFloat = 20
+        static let badgeHeight: CGFloat = 20
+        static let badgeRadius: CGFloat = 10
+        static let badgePadHorizontal: CGFloat = 6
+        static let badgeFontSize: CGFloat = 11
+        static let recordRowHeight: CGFloat = 56
+        static let recordThumb: CGFloat = 40
+        static let recordThumbRadius: CGFloat = 8
     }
 
     // MARK: - 画面共通
