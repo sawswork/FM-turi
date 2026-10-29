@@ -140,3 +140,5 @@ L16 まで終わったら `docs/OWNER_TASKS.md` を書き、そこで初めて�
 - 作業ブランチは `main`。コミットメッセージは `L{n}: ...` で始める。
 - 現在地と次のループは `docs/STATUS.md`。ループ記録は `CHANGELOG.md`。判断記録は `docs/adr/`。
 - 開発コンテナには Xcode がない。純粋ロジック（釣れ率・潮汐計算・キャッシュ抑止）は `TideCore` という Apple フレームワーク非依存の Swift Package に置き、Linux の `swift test` でも検証できるようにする。SwiftUI 部分は CI（macos-latest）で検証する。
+- ローカルの SwiftLint は `scripts/dev-swiftlint-linux.sh`（SourceKit 不要の構文ルールのみ）。CI では公式コンテナで全ルールを実行する。
+- macOS CI ジョブはコミットメッセージに `[ios]` を含むときだけ走る（ADR-0002）。ループ終了コミットには必ず付ける。

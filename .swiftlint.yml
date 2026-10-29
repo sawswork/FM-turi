@@ -1,0 +1,75 @@
+included:
+  - Tide
+  - TideTests
+  - TideCore/Sources
+  - TideCore/Tests
+excluded:
+  - build
+  - .build
+  - TideCore/.build
+  - fastlane
+  - ml
+
+disabled_rules:
+  - todo
+  - trailing_comma
+
+opt_in_rules:
+  - empty_count
+  - closure_spacing
+  - contains_over_first_not_nil
+  - first_where
+  - sorted_imports
+  - vertical_whitespace_closing_braces
+
+line_length:
+  warning: 140
+  error: 180
+  ignores_comments: true
+  ignores_urls: true
+
+identifier_name:
+  min_length: 1
+  max_length: 50
+  excluded: [id, x, y, w, h, r, i, j, k]
+
+type_name:
+  min_length: 3
+  max_length: 50
+
+function_body_length:
+  warning: 80
+  error: 120
+
+type_body_length:
+  warning: 300
+  error: 400
+
+file_length:
+  warning: 500
+  error: 700
+
+cyclomatic_complexity:
+  warning: 15
+  error: 25
+
+nesting:
+  type_level: 3
+
+large_tuple:
+  warning: 3
+
+custom_rules:
+  hex_color_outside_tokens:
+    name: "DesignTokens 以外での色の直書き禁止"
+    regex: "Color\\(hex:"
+    included: "Tide/.*\\.swift"
+    excluded: "Tide/Core/DesignTokens\\.swift"
+    message: "色は DesignTokens.Colors の定数だけを使う（指示書 §4）"
+    severity: error
+  no_print:
+    name: "print 禁止"
+    regex: "^\\s*print\\("
+    included: "Tide/.*\\.swift"
+    message: "ログは os.Logger のみ（指示書 §4）"
+    severity: error

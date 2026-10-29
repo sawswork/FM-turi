@@ -1,0 +1,71 @@
+name: TestFlight
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  testflight:
+    name: Archive and upload
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check secrets
+        id: secrets
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+          TEAM_ID: ${{ secrets.TEAM_ID }}
+        shell: bash
+        run: |
+          missing=()
+          [[ -z "$ASC_KEY_ID" ]] && missing+=(ASC_KEY_ID)
+          [[ -z "$ASC_ISSUER_ID" ]] && missing+=(ASC_ISSUER_ID)
+          [[ -z "$ASC_KEY_P8" ]] && missing+=(ASC_KEY_P8)
+          [[ -z "$TEAM_ID" ]] && missing+=(TEAM_ID)
+          if (( ${#missing[@]} > 0 )); then
+            echo "::notice title=スキップ::Secrets 未登録のため TestFlight へのアップロードをスキップしました: ${missing[*]}"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up Ruby
+        if: steps.secrets.outputs.skip == 'false'
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
+      - name: Install XcodeGen
+        if: steps.secrets.outputs.skip == 'false'
+        run: |
+          curl -fsSL -o /tmp/xcodegen.zip \
+            https://github.com/yonaskolb/XcodeGen/releases/download/2.42.0/xcodegen.zip
+          rm -rf /tmp/xcodegen && mkdir -p /tmp/xcodegen
+          unzip -q -o /tmp/xcodegen.zip -d /tmp/xcodegen
+          echo "/tmp/xcodegen/xcodegen/bin" >> "$GITHUB_PATH"
+
+      - name: Generate project
+        if: steps.secrets.outputs.skip == 'false'
+        run: xcodegen generate --spec project.yml
+
+      - name: Fastlane beta
+        if: steps.secrets.outputs.skip == 'false'
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+          TEAM_ID: ${{ secrets.TEAM_ID }}
+          FASTLANE_SKIP_UPDATE_CHECK: "1"
+          FASTLANE_HIDE_CHANGELOG: "1"
+        run: bundle exec fastlane ios beta
+
+      - name: Skipped
+        if: steps.secrets.outputs.skip == 'true'
+        run: echo "スキップ（Secrets 未登録）。docs/OWNER_TASKS.md の手順で Secrets を登録してから再実行してください。"

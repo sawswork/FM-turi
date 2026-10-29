@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  changes:
+    name: Changed files
+    runs-on: ubuntu-latest
+    outputs:
+      code: ${{ steps.filter.outputs.code }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: filter
+        shell: bash
+        run: |
+          before="${{ github.event.before }}"
+          after="${{ github.sha }}"
+          code=true
+          if [[ "${{ github.event_name }}" == "push" && -n "$before" && ! "$before" =~ ^0+$ ]]; then
+            if git cat-file -e "$before" 2>/dev/null; then
+              if ! git diff --name-only "$before" "$after" | grep -vE '^(docs/|[^/]+\.md$)' | grep -q .; then
+                code=false
+              fi
+            fi
+          fi
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          echo "code=$code"
+
+  lint:
+    name: SwiftLint
+    runs-on: ubuntu-latest
+    container: ghcr.io/realm/swiftlint:0.57.0
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint
+        run: swiftlint lint --strict --reporter github-actions-logging
+
+  core-test:
+    name: TideCore tests (Linux)
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-latest
+    container: swift:6.0-jammy
+    steps:
+      - uses: actions/checkout@v4
+      - name: swift test
+        run: swift test --package-path TideCore
+
+  ios:
+    name: iOS build + test (simulator)
+    needs: [changes, lint, core-test]
+    if: >-
+      needs.changes.outputs.code == 'true' &&
+      (github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[ios]'))
+    runs-on: macos-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test
+        run: scripts/ci-ios.sh

@@ -1,0 +1,2 @@
+app_identifier("jp.tide.app")
+team_id(ENV["TEAM_ID"])

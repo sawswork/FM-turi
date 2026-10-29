@@ -1,0 +1,83 @@
+name: Tide
+options:
+  bundleIdPrefix: jp.tide
+  deploymentTarget:
+    iOS: "18.0"
+  xcodeVersion: "16.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+  groupSortPosition: top
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    IPHONEOS_DEPLOYMENT_TARGET: "18.0"
+    TARGETED_DEVICE_FAMILY: "1"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_USER_SCRIPT_SANDBOXING: "YES"
+    SWIFT_EMIT_LOC_STRINGS: "YES"
+packages:
+  TideCore:
+    path: TideCore
+targets:
+  Tide:
+    type: application
+    platform: iOS
+    sources:
+      - path: Tide
+    dependencies:
+      - package: TideCore
+    info:
+      path: Tide/Info.plist
+      properties:
+        CFBundleDisplayName: Tide
+        CFBundleName: Tide
+        LSRequiresIPhoneOS: true
+        UILaunchScreen: {}
+        UIUserInterfaceStyle: Dark
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        ITSAppUsesNonExemptEncryption: false
+        CFBundleURLTypes:
+          - CFBundleURLName: jp.tide.app
+            CFBundleURLSchemes:
+              - tide
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: jp.tide.app
+        PRODUCT_NAME: Tide
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        GENERATE_INFOPLIST_FILE: "NO"
+  TideTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: TideTests
+    dependencies:
+      - target: Tide
+      - package: TideCore
+    info:
+      path: TideTests/Info.plist
+      properties: {}
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: jp.tide.app.tests
+        GENERATE_INFOPLIST_FILE: "NO"
+schemes:
+  Tide:
+    build:
+      targets:
+        Tide: all
+        TideTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - TideTests
+    archive:
+      config: Release
