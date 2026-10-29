@@ -1,0 +1,26 @@
+name: Probe (temporary)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: tide736 responses
+        run: |
+          for u in \
+            "https://tide736.net/api/get_tide.php?pc=14&hc=10&yr=2026&mn=10&dy=30&rg=day" \
+            "https://tide736.net/api/get_tide.php?pc=14&hc=1&yr=2026&mn=10&dy=30&rg=week" \
+            "https://tide736.net/api/get_harbor.php?pc=14" \
+            "https://tide736.net/api/get_harbor_list.php?pc=14" \
+            "https://tide736.net/api/get_pc.php" \
+            "https://tide736.net/api/" \
+            "https://tide736.net/"; do
+            echo "=================== $u"
+            curl -sS -L --max-time 30 -A "Mozilla/5.0" "$u" | head -c 6000
+            echo
+          done
