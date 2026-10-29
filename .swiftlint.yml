@@ -49,6 +49,10 @@ file_length:
   warning: 500
   error: 700
 
+function_parameter_count:
+  warning: 8
+  error: 10
+
 cyclomatic_complexity:
   warning: 15
   error: 25

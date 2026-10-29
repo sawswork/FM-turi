@@ -114,6 +114,97 @@ enum DesignTokens {
         static let occupiedHeight: CGFloat = height + marginBottom
     }
 
+    // MARK: - Home リング領域（A-1 2）h268、リング240 r102
+
+    enum HomeRing {
+        static let areaHeight: CGFloat = 268
+        static let size: CGFloat = 240
+        static let radius: CGFloat = 102
+        static let lineWidth: CGFloat = 13
+        static let haloLineWidth: CGFloat = 28
+        static let haloOpacity: Double = 0.10
+        static let numberFontSize: CGFloat = 86
+        static let numberTracking: CGFloat = -4
+        static let dotsTop: CGFloat = 8
+        static let dotSize: CGFloat = 5
+        static let dotGap: CGFloat = 5
+        static let dotCount = 5
+        /// 数字の中心から点の中心までの縦オフセット
+        static let dotsOffsetY: CGFloat = 44
+    }
+
+    // MARK: - 4条件（A-1 3）4列 gap10 pad=0 36、各h60 gap12
+
+    enum Conditions {
+        static let columns = 4
+        static let gap: CGFloat = 10
+        static let padHorizontal: CGFloat = 36
+        static let cellHeight: CGFloat = 60
+        static let iconMeterGap: CGFloat = 12
+        static let iconSize: CGFloat = 24
+    }
+
+    // MARK: - 24時間バー（A-1 6）pad=10 24 0 24 h50 gap5 r3
+
+    enum HourBar {
+        static let padTop: CGFloat = 10
+        static let height: CGFloat = 50
+        static let gap: CGFloat = 5
+        static let radius: CGFloat = 3
+        static let baseHeight: CGFloat = 6
+        static let scale: CGFloat = 0.42
+        static let highlightThreshold = 60
+    }
+
+    // MARK: - Detail（A-3）
+
+    enum Detail {
+        static let topHeight: CGFloat = 150
+        static let topOpacity: Double = 0.3
+        static let ringSize: CGFloat = 120
+        static let ringRadius: CGFloat = 50
+        static let ringLineWidth: CGFloat = 9
+        static let sheetHeight: CGFloat = 694
+        static let sheetRadius: CGFloat = 32
+        static let sheetPadTop: CGFloat = 12
+        static let handleWidth: CGFloat = 36
+        static let handleHeight: CGFloat = 5
+        static let handleRadius: CGFloat = 3
+        static let handleBottom: CGFloat = 14
+        static let placeRowBottom: CGFloat = 8
+        static let placePinSize: CGFloat = 13
+        static let placeFontSize: CGFloat = 13
+        static let gridColumnGap: CGFloat = 24
+        static let cellHeight: CGFloat = 70
+        static let cellPadTop: CGFloat = 12
+        static let cellPadBottom: CGFloat = 10
+        static let borderWidth: CGFloat = 1
+        static let labelFontSize: CGFloat = 11
+        static let labelTracking: CGFloat = 0.8
+        static let valueFontSize: CGFloat = 26
+        static let valueTracking: CGFloat = -1
+        static let unitFontSize: CGFloat = 12
+        static let unitGap: CGFloat = 4
+        static let moonRowPadTop: CGFloat = 12
+        static let moonRowPadBottom: CGFloat = 10
+        static let moonGlyphSize: CGFloat = 18
+        static let moonGlyphRadius: CGFloat = 7.65
+        static let moonGap: CGFloat = 14
+        static let moonCount = 7
+        static let moonTodayBorder: CGFloat = 1.5
+        static let moonOtherOpacity: Double = 0.45
+        static let breakdownPadTop: CGFloat = 14
+        static let breakdownGap: CGFloat = 10
+        static let breakdownLabelWidth: CGFloat = 46
+        static let breakdownBarHeight: CGFloat = 6
+        static let breakdownBarRadius: CGFloat = 3
+        static let breakdownValueWidth: CGFloat = 30
+        static let breakdownValueFontSize: CGFloat = 12
+        static let breakdownOrangeThreshold: Double = 0.5
+        static let closeHeight: CGFloat = 56
+        static let closeIconSize: CGFloat = 22
+    }
+
     // MARK: - 日付チップ（A-1 4）h30 r15 pad=0 12 12/600 字間0.3
 
     enum Chip {
