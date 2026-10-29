@@ -5,6 +5,7 @@ import TideCore
 /// 5タブのルート。タブバーは付録A A-0 のカスタム実装。
 struct RootView: View {
     @Environment(AppRouter.self) private var router
+    @AppStorage(NoticeView.acceptedKey) private var noticeAccepted = false
     private let logger = Logger(subsystem: "jp.tide.app", category: "RootView")
 
     var body: some View {
@@ -26,6 +27,9 @@ struct RootView: View {
                 return
             }
             router.handle(link)
+        }
+        .fullScreenCover(isPresented: Binding(get: { !noticeAccepted }, set: { noticeAccepted = !$0 })) {
+            NoticeView { noticeAccepted = true }
         }
     }
 

@@ -6,7 +6,8 @@ import SwiftData
 enum AppContainer {
     static let appGroupID = "group.jp.tide.app"
     static var schema: Schema {
-        Schema([Spot.self, WeatherRecord.self, MarineRecord.self, TideDayRecord.self, CatchRecord.self, TackleItem.self])
+        Schema([Spot.self, WeatherRecord.self, MarineRecord.self, TideDayRecord.self, CatchRecord.self, TackleItem.self,
+                TideStationConstants.self])
     }
     private static let logger = Logger(subsystem: "jp.tide.app", category: "AppContainer")
 

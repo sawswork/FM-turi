@@ -422,6 +422,21 @@ enum DesignTokens {
         static let researchInterval: TimeInterval = 7 * 86_400
     }
 
+    // MARK: - 注意書き（指示書 §3-1）
+
+    enum Notice {
+        static let padTop: CGFloat = 32
+        static let gap: CGFloat = 18
+        static let titleFontSize: CGFloat = 22
+        static let bodyFontSize: CGFloat = 15
+        static let lineSpacing: CGFloat = 4
+        static let buttonHeight: CGFloat = 60
+        static let buttonRadius: CGFloat = 30
+        static let buttonIconSize: CGFloat = 26
+        static let buttonIconLineWidth: CGFloat = 2.2
+        static let padBottom: CGFloat = 24
+    }
+
     // MARK: - 画面共通
 
     enum Screen {
