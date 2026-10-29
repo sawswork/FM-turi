@@ -7,11 +7,15 @@ struct TackleView: View {
     @Environment(AppRouter.self) private var router
     @Environment(\.modelContext) private var context
     @Query(sort: \TackleItem.sortOrder) private var tackle: [TackleItem]
+    @Query private var records: [CatchRecord]
 
     private typealias Tkl = DesignTokens.Tackle
 
     private var sinkers: [TackleItem] { tackle.filter { $0.kind == .sinker } }
     private var hooks: [TackleItem] { tackle.filter { $0.kind == .hook } }
+
+    /// 使用頻度（釣果の記録から数える。L14）
+    private var usage: TackleUsage { TackleUsage(records: records, sinkers: sinkers, hooks: hooks) }
 
     var body: some View {
         ScreenContainer {
@@ -30,7 +34,7 @@ struct TackleView: View {
                         heading(icon: .hook, text: "#")
                             .padding(.top, Tkl.hookHeadingPadTop)
                         hookGrid
-                        TackleMatrixView(tackle: tackle)
+                        TackleMatrixView(tackle: tackle, values: usage.matrix)
                     }
                 }
                 .scrollIndicators(.hidden)
@@ -77,16 +81,15 @@ struct TackleView: View {
         .padding(.horizontal, Tkl.circlesPadHorizontal)
     }
 
-    private var maxUsed: Int { max(tackle.filter { $0.kind == .sinker }.map(\.usedCount).max() ?? 0, 1) }
-
     private var stockRow: some View {
-        HStack(spacing: 0) {
+        let usage = usage
+        return HStack(spacing: 0) {
             ForEach(Array(sinkers.enumerated()), id: \.element.key) { index, item in
                 VStack(spacing: Tkl.stockGap) {
                     Text("\(item.stock)")
                         .font(DesignTokens.Fonts.text(Tkl.stockFontSize, .w500))
                         .foregroundStyle(DesignTokens.Colors.primary)
-                    MeterView(fraction: Double(item.usedCount) / Double(maxUsed),
+                    MeterView(fraction: usage.sinkerShare(item.label),
                               width: Tkl.stockMeterWidth, height: Tkl.stockMeterHeight)
                 }
                 .frame(width: Tkl.stockColumnWidth)
@@ -179,7 +182,40 @@ struct TackleView: View {
     }
 }
 
-/// A-6 4 行列（L14 で使用頻度を集計）。L12 は骨組みのみ（値は 0）。
+/// 使用頻度の集計（釣果の記録ベース）。
+struct TackleUsage {
+    let sinkerCounts: [String: Int]
+    let hookCounts: [String: Int]
+    /// 行=フック、列=シンカー の使用回数
+    let matrix: [[Int]]
+
+    init(records: [CatchRecord], sinkers: [TackleItem], hooks: [TackleItem]) {
+        var sinkerCounts: [String: Int] = [:]
+        var hookCounts: [String: Int] = [:]
+        var matrix = Array(repeating: Array(repeating: 0, count: sinkers.count), count: hooks.count)
+        for record in records {
+            let sinkerLabel = record.sinkerGrams.map(String.init)
+            if let sinkerLabel { sinkerCounts[sinkerLabel, default: 0] += 1 }
+            if let hook = record.hookSize { hookCounts[hook, default: 0] += 1 }
+            if let sinkerLabel, let hook = record.hookSize,
+               let row = hooks.firstIndex(where: { $0.label == hook }),
+               let column = sinkers.firstIndex(where: { $0.label == sinkerLabel }) {
+                matrix[row][column] += 1
+            }
+        }
+        self.sinkerCounts = sinkerCounts
+        self.hookCounts = hookCounts
+        self.matrix = matrix
+    }
+
+    /// そのシンカーの使用回数 ÷ 最多の使用回数（0...1）。
+    func sinkerShare(_ label: String) -> Double {
+        let maxCount = max(sinkerCounts.values.max() ?? 0, 1)
+        return Double(sinkerCounts[label] ?? 0) / Double(maxCount)
+    }
+}
+
+/// A-6 4 行列: 1行目=シンカー、左列=フック、セルの円 直径 6+値×3（≥5 橙、≥3 白、他 面2）。
 struct TackleMatrixView: View {
     let tackle: [TackleItem]
     var values: [[Int]] = []
