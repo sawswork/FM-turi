@@ -8,12 +8,19 @@ enum SeedData {
 
     @MainActor
     static func seedIfNeeded(context: ModelContext) {
-        var descriptor = FetchDescriptor<Spot>()
-        descriptor.fetchLimit = 1
-        let existing = (try? context.fetch(descriptor)) ?? []
-        guard existing.isEmpty else { return }
-        for spot in Spot.seedSpots() {
-            context.insert(spot)
+        var spotDescriptor = FetchDescriptor<Spot>()
+        spotDescriptor.fetchLimit = 1
+        if ((try? context.fetch(spotDescriptor)) ?? []).isEmpty {
+            for spot in Spot.seedSpots() {
+                context.insert(spot)
+            }
+        }
+        var tackleDescriptor = FetchDescriptor<TackleItem>()
+        tackleDescriptor.fetchLimit = 1
+        if ((try? context.fetch(tackleDescriptor)) ?? []).isEmpty {
+            for item in TackleItem.seedItems() {
+                context.insert(item)
+            }
         }
         do {
             try context.save()

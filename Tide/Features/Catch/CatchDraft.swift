@@ -18,8 +18,12 @@ final class CatchDraft {
     var candidateConfidences: [Double] = []
     var selectedIndex = 0
     var lengthText = ""
-    var sinkerGrams = 10
-    var hookSize = "1/0"
+    /// 推定に使った基準物（nil=ユーザー入力）
+    var lengthSource: SizeEstimate.Reference.Kind?
+    var sinkerLabel = "10"
+    var hookLabel = "1/0"
+
+    var sinkerGrams: Int { Int(sinkerLabel) ?? 0 }
 
     var selectedSpecies: Species? {
         candidates.indices.contains(selectedIndex) ? candidates[selectedIndex] : nil
@@ -45,15 +49,19 @@ final class CatchDraft {
         photoLocation = meta.location
     }
 
-    /// Vision で候補3つを出し、1つ目を選択する。
+    /// Vision で候補3つを出し、1つ目を選択する。続けてサイズ推定（推定できなければ空のまま）。
     func classify() async {
         guard let imageData else { return }
         isClassifying = true
         let result = await FishClassifier.classify(imageData)
-        isClassifying = false
         candidates = result.map(\.species)
         candidateConfidences = result.map(\.confidence)
         selectedIndex = 0
+        if lengthText.isEmpty, let estimate = await SizeEstimator.estimate(imageData) {
+            lengthText = String(format: "%.0f", estimate.lengthCm)
+            lengthSource = estimate.referenceKind
+        }
+        isClassifying = false
     }
 
     func reset() {
@@ -66,5 +74,6 @@ final class CatchDraft {
         candidateConfidences = []
         selectedIndex = 0
         lengthText = ""
+        lengthSource = nil
     }
 }

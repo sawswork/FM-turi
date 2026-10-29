@@ -1,6 +1,7 @@
 import SwiftUI
 
-/// 付録A A-0 のトークン。画面はこの定数だけを使う（直書き禁止: SwiftLint `hex_color_outside_tokens`）。指示書 §4 により1ファイルに集約する。
+/// 付録A A-0 のトークン。画面はこの定数だけを使う（直書き禁止: SwiftLint `hex_color_outside_tokens`）。
+/// 指示書 §4 により1ファイルに集約する。
 enum DesignTokens {
     // MARK: - 色
 

@@ -11,6 +11,7 @@ struct CatchView: View {
     @Environment(TideStore.self) private var tide
     @Environment(\.modelContext) private var context
     @Query(filter: #Predicate<Spot> { $0.isRegistered }) private var spots: [Spot]
+    @Query(sort: \TackleItem.sortOrder) private var tackle: [TackleItem]
 
     @State private var draft = CatchDraft()
     @State private var pickerItem: PhotosPickerItem?
@@ -216,24 +217,45 @@ struct CatchView: View {
 
     // MARK: - タックル
 
+    private var sinkers: [TackleItem] { tackle.filter { $0.kind == .sinker } }
+    private var hooks: [TackleItem] { tackle.filter { $0.kind == .hook } }
+
+    /// タップで次の候補へ巡回（Tackle 画面の選択中を初期値にする）。
     private var tacklePills: some View {
         HStack(spacing: Cat.tackleGap) {
-            tacklePill(icon: .sinker, text: "\(draft.sinkerGrams)")
-            tacklePill(icon: .hook, text: draft.hookSize)
+            tacklePill(icon: .sinker, text: draft.sinkerLabel) {
+                draft.sinkerLabel = next(after: draft.sinkerLabel, in: sinkers.map(\.label), fallback: TackleItem.sinkerLabels)
+            }
+            tacklePill(icon: .hook, text: draft.hookLabel) {
+                draft.hookLabel = next(after: draft.hookLabel, in: hooks.map(\.label), fallback: TackleItem.hookLabels)
+            }
         }
         .padding(.top, Cat.tacklePadTop)
+        .onAppear {
+            if let sinker = sinkers.first(where: \.isSelected) { draft.sinkerLabel = sinker.label }
+            if let hook = hooks.first(where: \.isSelected) { draft.hookLabel = hook.label }
+        }
     }
 
-    private func tacklePill(icon: TideIcon, text: String) -> some View {
-        HStack(spacing: Cat.tackleInnerGap) {
-            IconView(icon: icon, size: Cat.tackleIconSize)
-            Text(text)
-                .font(DesignTokens.Fonts.text(Cat.tackleFontSize, .w500))
-                .foregroundStyle(DesignTokens.Colors.primary)
+    private func next(after current: String, in labels: [String], fallback: [String]) -> String {
+        let list = labels.isEmpty ? fallback : labels
+        guard let index = list.firstIndex(of: current) else { return list.first ?? current }
+        return list[(index + 1) % list.count]
+    }
+
+    private func tacklePill(icon: TideIcon, text: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            HStack(spacing: Cat.tackleInnerGap) {
+                IconView(icon: icon, size: Cat.tackleIconSize)
+                Text(text)
+                    .font(DesignTokens.Fonts.text(Cat.tackleFontSize, .w500))
+                    .foregroundStyle(DesignTokens.Colors.primary)
+            }
+            .padding(.horizontal, Cat.tacklePadHorizontal)
+            .frame(height: Cat.tackleHeight)
+            .background(DesignTokens.Colors.surface, in: RoundedRectangle(cornerRadius: Cat.tackleRadius, style: .continuous))
         }
-        .padding(.horizontal, Cat.tacklePadHorizontal)
-        .frame(height: Cat.tackleHeight)
-        .background(DesignTokens.Colors.surface, in: RoundedRectangle(cornerRadius: Cat.tackleRadius, style: .continuous))
+        .buttonStyle(.plain)
     }
 
     // MARK: - 保存
@@ -281,10 +303,18 @@ struct CatchView: View {
             photoHeight: size.height,
             scoreTotal: score.total,
             sinkerGrams: draft.sinkerGrams,
-            hookSize: draft.hookSize
+            hookSize: draft.hookLabel
         )
         record.apply(tide: day, at: draft.capturedAt, weather: conditions.weather, marine: conditions.marine)
+        record.lengthSource = draft.lengthSource?.rawValue
         context.insert(record)
+        // 使用したタックルを「選択中」にし使用回数を増やす（L14 の行列・使用頻度の元データ）
+        for item in tackle {
+            let used = (item.kind == .sinker && item.label == draft.sinkerLabel) || (item.kind == .hook && item.label == draft.hookLabel)
+            if used { item.usedCount += 1 }
+            if item.kind == .sinker { item.isSelected = item.label == draft.sinkerLabel }
+            if item.kind == .hook { item.isSelected = item.label == draft.hookLabel }
+        }
         try? context.save()
         draft.reset()
         pickerItem = nil

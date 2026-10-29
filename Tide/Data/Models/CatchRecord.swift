@@ -17,6 +17,8 @@ final class CatchRecord {
     /// 確定した候補の確度（0...1、無ければ nil）
     var confidence: Double?
     var lengthCm: Double?
+    /// サイズの出どころ: "coin" / "ruler" / "lidar" / nil=ユーザー入力
+    var lengthSource: String?
     var spotName: String
     var latitude: Double?
     var longitude: Double?

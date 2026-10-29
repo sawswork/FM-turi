@@ -11,6 +11,9 @@ enum PreviewData {
         for spot in Spot.seedSpots() {
             container.mainContext.insert(spot)
         }
+        for item in TackleItem.seedItems() {
+            container.mainContext.insert(item)
+        }
         return container
     }()
 
