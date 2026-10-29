@@ -29,6 +29,8 @@ final class CatchRecord {
 
     // その時刻の条件
     var scoreTotal: Int
+    /// 保存時の v1 要素点数（FishingScore.Key.allCases の順。釣れ率 v2 の学習に使う）
+    var componentPoints: [Int]
     var tideLevelCm: Double?
     var tideRising: Bool?
     var tideType: String?
@@ -49,7 +51,7 @@ final class CatchRecord {
          candidateIDs: [String] = [], candidateConfidences: [Double] = [], confidence: Double? = nil,
          lengthCm: Double? = nil, spotName: String, latitude: Double? = nil, longitude: Double? = nil,
          photoFileName: String? = nil, photoWidth: Double = 0, photoHeight: Double = 0,
-         scoreTotal: Int = 0, sinkerGrams: Int? = nil, hookSize: String? = nil) {
+         scoreTotal: Int = 0, componentPoints: [Int] = [], sinkerGrams: Int? = nil, hookSize: String? = nil) {
         self.id = id
         self.createdAt = createdAt
         self.capturedAt = capturedAt
@@ -65,6 +67,7 @@ final class CatchRecord {
         self.photoWidth = photoWidth
         self.photoHeight = photoHeight
         self.scoreTotal = scoreTotal
+        self.componentPoints = componentPoints
         self.sinkerGrams = sinkerGrams
         self.hookSize = hookSize
     }

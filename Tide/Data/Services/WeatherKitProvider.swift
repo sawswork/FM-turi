@@ -9,10 +9,13 @@ struct WeatherKitProvider: WeatherProvider {
         let location = CLLocation(latitude: point.latitude, longitude: point.longitude)
         let start = CacheKey.bucketStart(date).addingTimeInterval(-3 * 3600)
         let end = CacheKey.bucketStart(date).addingTimeInterval(24 * 3600)
-        let (current, hourly) = try await WeatherService.shared.weather(
+        let (current, hourly, alerts) = try await WeatherService.shared.weather(
             for: location,
-            including: .current, .hourly(startDate: start, endDate: end)
+            including: .current, .hourly(startDate: start, endDate: end), .alerts
         )
+        let alertSummaries = (alerts ?? []).map { alert in
+            alert.summary.isEmpty ? "\(alert.severity)" : alert.summary
+        }
         let bucket = CacheKey.bucketStart(date)
         let hours = hourly.forecast
         let atNow = hours.first { CacheKey.bucketStart($0.date) == bucket }
@@ -27,7 +30,8 @@ struct WeatherKitProvider: WeatherProvider {
             pressureTrend3h: trend,
             airTemperature: (atNow?.temperature ?? current.temperature).converted(to: .celsius).value,
             validAt: bucket,
-            fetchedAt: Date()
+            fetchedAt: Date(),
+            alerts: alertSummaries
         )
     }
 }

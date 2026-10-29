@@ -12,10 +12,11 @@ struct HomeScore {
 
     static func make(now: Date, day: TideDay?, selectedDay: TideDay?, weather: WeatherSnapshot?,
                      marine: MarineSnapshot?, marineSeries: [MarineSnapshot], band: TemperatureBand?) -> HomeScore {
+        let weights = ScoreWeightsStore.current
         let input = FishingScore.input(at: now, tide: day, weather: weather, marine: marine, band: band)
-        let result = FishingScore.compute(input)
+        let result = FishingScore.compute(input, weights: weights)
         let hourly = selectedDay.map {
-            FishingScore.hourlyTotals(day: $0, weather: weather, marineSeries: marineSeries, band: band)
+            FishingScore.hourlyTotals(day: $0, weather: weather, marineSeries: marineSeries, band: band, weights: weights)
         } ?? Array(repeating: 0, count: 24)
         return HomeScore(result: result, hourly: hourly, weather: weather, marine: marine)
     }

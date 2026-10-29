@@ -139,7 +139,7 @@ final class SpotsStore {
             let days = await tide.days(for: spot.point, now: now).days
             let day = days.first { now >= $0.dayStart && now < $0.dayStart.addingTimeInterval(86_400) } ?? days.first
             let input = FishingScore.input(at: now, tide: day, weather: snapshot.weather, marine: snapshot.marine, band: band)
-            scores[spot.id] = FishingScore.compute(input).total
+            scores[spot.id] = FishingScore.compute(input, weights: ScoreWeightsStore.current).total
             if let direction = snapshot.weather?.windDirection { windDirections[spot.id] = direction }
         }
     }

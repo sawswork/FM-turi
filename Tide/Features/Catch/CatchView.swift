@@ -279,9 +279,10 @@ struct CatchView: View {
         lengthFocused = false
         let point = recordPoint
         let day = tideDay
-        let score = FishingScore.compute(FishingScore.input(
+        let input = FishingScore.input(
             at: draft.capturedAt, tide: day, weather: conditions.weather, marine: conditions.marine,
-            band: draft.selectedSpecies?.band ?? Species.defaultForScore.band))
+            band: draft.selectedSpecies?.band ?? Species.defaultForScore.band)
+        let score = FishingScore.compute(input, weights: ScoreWeightsStore.current)
         var fileName: String?
         var size = CGSize.zero
         if let image = draft.image, let saved = PhotoStore.save(image) {
@@ -302,6 +303,7 @@ struct CatchView: View {
             photoWidth: size.width,
             photoHeight: size.height,
             scoreTotal: score.total,
+            componentPoints: FishingScore.rawPoints(input),
             sinkerGrams: draft.sinkerGrams,
             hookSize: draft.hookLabel
         )
@@ -319,6 +321,7 @@ struct CatchView: View {
         draft.reset()
         pickerItem = nil
         router.selectedTab = .zukan
+        Task { await ScoreV2Trainer.retrain(context: context) }
     }
 }
 

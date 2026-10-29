@@ -587,6 +587,20 @@ enum DesignTokens {
         static let matrixWhiteThreshold = 3
     }
 
+    // MARK: - 設定（L15）
+
+    enum Settings {
+        static let padTop: CGFloat = 12
+        static let padBottom: CGFloat = 24
+        static let sectionGap: CGFloat = 20
+        static let sectionPadTop: CGFloat = 14
+        static let rowGap: CGFloat = 8
+        static let rowHeight: CGFloat = 32
+        static let bodyFontSize: CGFloat = 14
+        static let buttonHeight: CGFloat = 48
+        static let buttonRadius: CGFloat = 24
+    }
+
     // MARK: - 画面共通
 
     enum Screen {

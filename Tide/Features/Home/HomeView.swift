@@ -11,6 +11,7 @@ struct HomeView: View {
     @Query(sort: \TackleItem.sortOrder) private var tackle: [TackleItem]
     @State private var selectedDay = 0
     @State private var showDetail = false
+    @State private var showSettings = false
 
     /// 現在地に最も近い登録済み釣り場。
     private var nearestSpot: Spot? {
@@ -48,8 +49,9 @@ struct HomeView: View {
                     TopBarView {
                         LocationPill(name: spotName)
                     } trailing: {
-                        RoundButton(icon: .dots)
+                        RoundButton(icon: .dots) { showSettings = true }
                     }
+                    AlertStrip(alerts: conditions.weather?.alerts ?? [])
                     ScoreRingView(total: score.result.total) { showDetail = true }
                     ConditionsGrid(meters: score.meters) { showDetail = true }
                     if !tide.days.isEmpty {
@@ -62,6 +64,9 @@ struct HomeView: View {
             }
             .fullScreenCover(isPresented: $showDetail) {
                 DetailView(data: detailData(now: now)) { showDetail = false }
+            }
+            .sheet(isPresented: $showSettings) {
+                SettingsView()
             }
         }
         .onAppear { location.start() }

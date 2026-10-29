@@ -41,6 +41,24 @@ public enum FishingScore {
         }
     }
 
+    /// 要素ごとの配点（合計 100）。v1 は §4 の配点、v2 は釣果ログから学習（ScoreLearner）。
+    public struct Weights: Hashable, Codable, Sendable {
+        public var byKey: [Key: Double]
+        public var learnedAt: Date?
+        public var sampleCount: Int
+
+        public init(byKey: [Key: Double], learnedAt: Date? = nil, sampleCount: Int = 0) {
+            self.byKey = byKey
+            self.learnedAt = learnedAt
+            self.sampleCount = sampleCount
+        }
+
+        public static let v1 = Weights(byKey: Dictionary(uniqueKeysWithValues: Key.allCases.map { ($0, Double($0.max)) }))
+
+        public func weight(_ key: Key) -> Double { byKey[key] ?? Double(key.max) }
+        public var isV1: Bool { learnedAt == nil }
+    }
+
     public struct Result: Hashable, Codable, Sendable {
         /// 0...100
         public var total: Int
@@ -104,7 +122,7 @@ public enum FishingScore {
 
     // MARK: - 計算
 
-    public static func compute(_ input: Input) -> Result {
+    public static func compute(_ input: Input, weights: Weights = .v1) -> Result {
         var components: [Component] = [
             tidePoints(rate: input.tideRateCmPerHour),
             timePoints(minutes: input.minutesToTwilight),
@@ -113,9 +131,21 @@ public enum FishingScore {
             sstPoints(temperature: input.seaSurfaceTemperature, band: input.band),
             wavePoints(height: input.waveHeight)
         ]
+        if !weights.isV1 {
+            components = components.map { component in
+                let scaled = Double(component.points) * weights.weight(component.key) / Double(component.key.max)
+                return Component(key: component.key, points: Int(scaled.rounded()), missing: component.missing)
+            }
+        }
         components.sort { $0.points == $1.points ? $0.key.max > $1.key.max : $0.points > $1.points }
         let total = min(100, max(0, components.reduce(0) { $0 + $1.points }))
         return Result(total: total, components: components)
+    }
+
+    /// v1 の要素点数（Key.allCases の順）。釣果の記録に保存する。
+    public static func rawPoints(_ input: Input) -> [Int] {
+        let result = compute(input)
+        return Key.allCases.map { result.component($0).points }
     }
 
     static func tidePoints(rate: Double?) -> Component {
@@ -196,11 +226,11 @@ public enum FishingScore {
 
     /// 1日 24 時間分（毎正時）の釣れ率。気象は当日の値で一定、海況は時系列があればその時刻の値。
     public static func hourlyTotals(day: TideDay, weather: WeatherSnapshot?, marineSeries: [MarineSnapshot],
-                                    band: TemperatureBand?) -> [Int] {
+                                    band: TemperatureBand?, weights: Weights = .v1) -> [Int] {
         (0..<24).map { hour in
             let date = day.dayStart.addingTimeInterval(TimeInterval(hour) * 3600)
             let marine = marineSeries.min { abs($0.validAt.timeIntervalSince(date)) < abs($1.validAt.timeIntervalSince(date)) }
-            return compute(input(at: date, tide: day, weather: weather, marine: marine, band: band)).total
+            return compute(input(at: date, tide: day, weather: weather, marine: marine, band: band), weights: weights).total
         }
     }
 }
