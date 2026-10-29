@@ -127,7 +127,6 @@ struct SpotsView: View {
         }
         .mapStyle(.standard(elevation: .flat, pointsOfInterest: .excludingAll, showsTraffic: false))
         .mapControlVisibility(.hidden)
-        .annotationTitles(.hidden)
     }
 
     private func candidateDot(_ spot: Spot) -> some View {
