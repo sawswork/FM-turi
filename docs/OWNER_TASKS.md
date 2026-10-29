@@ -3,13 +3,8 @@
 所要約 60 分（Apple 側の処理待ちを除く）。順番どおりに進めてください。
 途中で赤（失敗）が出たら、新しいセッションで「続けて」と送ってください。STATUS.md を読んで私が直します。
 
-## 0. GitHub Actions を動かせるようにする（必須・最初に）
-2026-10-29 17:11 UTC から GitHub Actions の全ジョブが「recent account payments have failed or your spending limit needs to be increased」で止まっています。
-1. https://github.com/settings/billing を開く
-2. 「Payment information」で支払い方法を確認・更新する（失敗している請求があれば再試行）
-3. 「Spending limits」→ Actions の上限を確認する（$0 で止まっている場合は上限を上げるか、無料枠内で動くよう「Limit spending」のまま OK にする）
-4. https://github.com/sawswork/FM-turi/actions → 左の「CI」→ 右上「Run workflow」→ Branch main → Run workflow
-5. 緑になれば次へ。赤なら新しいセッションで「続けて」と送る（L5 以降は CI 未検証なので、ここで直す作業が発生します）
+## 0. GitHub Actions（済み）
+リポジトリを公開にしたことで Actions は動いています。最新コミットの CI は全ジョブ緑（2026-10-30 確認）。この手順は不要です。
 
 ## 1. Apple Developer: App ID と App Group と WeatherKit
 前提: Apple Developer Program に加入済み（年額）。https://developer.apple.com/account で以下。
