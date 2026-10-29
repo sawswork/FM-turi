@@ -10,17 +10,30 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: tide736 responses
+      - name: chart structure
         run: |
-          for u in \
-            "https://tide736.net/api/get_tide.php?pc=14&hc=10&yr=2026&mn=10&dy=30&rg=day" \
-            "https://tide736.net/api/get_tide.php?pc=14&hc=1&yr=2026&mn=10&dy=30&rg=week" \
-            "https://tide736.net/api/get_harbor.php?pc=14" \
-            "https://tide736.net/api/get_harbor_list.php?pc=14" \
-            "https://tide736.net/api/get_pc.php" \
-            "https://tide736.net/api/" \
-            "https://tide736.net/"; do
-            echo "=================== $u"
-            curl -sS -L --max-time 30 -A "Mozilla/5.0" "$u" | head -c 6000
-            echo
+          u="https://tide736.net/api/get_tide.php?pc=14&hc=13&yr=2026&mn=10&dy=30&rg=day"
+          curl -sS -L --max-time 30 -A "Mozilla/5.0" "$u" > /tmp/day.json
+          echo "CHART_KEYS: $(jq -c '.tide.chart | keys' /tmp/day.json)"
+          k=$(jq -r '.tide.chart | keys[0]' /tmp/day.json)
+          echo "DAY_KEYS: $(jq -c --arg k "$k" '.tide.chart[$k] | keys' /tmp/day.json)"
+          echo "SUN: $(jq -c --arg k "$k" '.tide.chart[$k].sun' /tmp/day.json)"
+          echo "MOON: $(jq -c --arg k "$k" '.tide.chart[$k].moon' /tmp/day.json)"
+          echo "FLOOD: $(jq -c --arg k "$k" '.tide.chart[$k].flood' /tmp/day.json)"
+          echo "EDD: $(jq -c --arg k "$k" '.tide.chart[$k].edd' /tmp/day.json)"
+          echo "TIDE_COUNT: $(jq -c --arg k "$k" '.tide.chart[$k].tide | length' /tmp/day.json)"
+          echo "TIDE_HEAD: $(jq -c --arg k "$k" '.tide.chart[$k].tide[0:4]' /tmp/day.json)"
+          echo "TIDE_TAIL: $(jq -c --arg k "$k" '.tide.chart[$k].tide[-2:]' /tmp/day.json)"
+          echo "OTHER: $(jq -c --arg k "$k" '.tide.chart[$k] | del(.tide, .sun, .moon, .flood, .edd)' /tmp/day.json)"
+          u2="https://tide736.net/api/get_tide.php?pc=14&hc=13&yr=2026&mn=10&dy=30&rg=week"
+          curl -sS -L --max-time 30 -A "Mozilla/5.0" "$u2" > /tmp/week.json
+          echo "WEEK_KEYS: $(jq -c '.tide.chart | keys' /tmp/week.json)"
+          echo "WEEK_TIDE_COUNT: $(jq -c '.tide.chart[keys[0]].tide | length' /tmp/week.json)"
+      - name: port list
+        run: |
+          for pc in $(seq 1 47); do
+            curl -sS -L --max-time 30 -A "Mozilla/5.0" "https://tide736.net/api/get_tide.php?pc=$pc&hc=1&yr=2026&mn=10&dy=30&rg=day" \
+              | jq -c --argjson pc "$pc" '.tide.link[]? | [$pc, .harbor_code, .harbor_namej, .latitude, .longitude, .tide_type]' \
+              | sed 's/^/PORT /'
+            sleep 0.3
           done
