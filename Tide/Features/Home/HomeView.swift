@@ -2,11 +2,13 @@ import SwiftData
 import SwiftUI
 import TideCore
 
-/// 付録A A-1 Home。L3: 上部帯（釣り場ピル＋dots）と条件の取得。
+/// 付録A A-1 Home。L3: 上部帯。L4: 日付行＋3日潮位グラフ。
 struct HomeView: View {
     @Environment(LocationService.self) private var location
     @Environment(ConditionsStore.self) private var conditions
+    @Environment(TideStore.self) private var tide
     @Query(filter: #Predicate<Spot> { $0.isRegistered }) private var spots: [Spot]
+    @State private var selectedDay = 0
 
     /// 現在地に最も近い登録済み釣り場。
     private var nearestSpot: Spot? {
@@ -27,11 +29,17 @@ struct HomeView: View {
                     RoundButton(icon: .dots)
                 }
                 Spacer(minLength: 0)
+                if !tide.days.isEmpty {
+                    DateChipRow(days: tide.days, selected: $selectedDay)
+                    TideGraphView(days: tide.days, selected: $selectedDay)
+                }
+                Spacer(minLength: 0)
             }
         }
         .onAppear { location.start() }
         .task(id: targetPoint) {
             await conditions.load(point: targetPoint)
+            await tide.load(point: targetPoint)
         }
     }
 }

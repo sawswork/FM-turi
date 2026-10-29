@@ -8,7 +8,10 @@ let package = Package(
         .library(name: "TideCore", targets: ["TideCore"])
     ],
     targets: [
-        .target(name: "TideCore"),
+        .target(
+            name: "TideCore",
+            resources: [.process("Resources")]
+        ),
         .testTarget(name: "TideCoreTests", dependencies: ["TideCore"])
     ],
     swiftLanguageModes: [.v6]

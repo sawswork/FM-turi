@@ -114,6 +114,66 @@ enum DesignTokens {
         static let occupiedHeight: CGFloat = height + marginBottom
     }
 
+    // MARK: - 日付チップ（A-1 4）h30 r15 pad=0 12 12/600 字間0.3
+
+    enum Chip {
+        static let height: CGFloat = 30
+        static let radius: CGFloat = 15
+        static let padHorizontal: CGFloat = 12
+        static let fontSize: CGFloat = 12
+        static let tracking: CGFloat = 0.3
+        static let gap: CGFloat = 6
+        static let rowPadTop: CGFloat = 18
+        static let moonGap: CGFloat = 8
+        static let tideTypeFontSize: CGFloat = 12
+    }
+
+    // MARK: - 潮位グラフ（A-1 5）1日 350×150
+
+    enum TideGraph {
+        static let dayWidth: CGFloat = 350
+        static let height: CGFloat = 150
+        static let marginTop: CGFloat = 10
+        static let curveTop: CGFloat = 46
+        static let curveBottom: CGFloat = 128
+        static let fillBottom: CGFloat = 150
+        static let curveLineWidth: CGFloat = 2
+        static let curveOpacityOther: Double = 0.35
+        static let fillOpacity: Double = 0.05
+        static let bandWidth: CGFloat = 24
+        static let bandHeight: CGFloat = 124
+        static let bandY: CGFloat = 4
+        static let bandRadius: CGFloat = 12
+        static let bandOpacityToday: Double = 0.06
+        static let bandOpacityOther: Double = 0.03
+        static let bandDefaultX: [CGFloat] = [74, 236]
+        static let sunArcStart = CGPoint(x: 30, y: 54)
+        static let sunArcControl = CGPoint(x: 175, y: -14)
+        static let sunArcEnd = CGPoint(x: 320, y: 54)
+        static let sunArcOpacity: Double = 0.18
+        static let sunArcLineWidth: CGFloat = 1.5
+        static let sunArcDash: [CGFloat] = [1, 5]
+        static let tickLabels = ["0", "6", "12", "18"]
+        static let tickX: [CGFloat] = [2, 87, 174, 261]
+        static let tickY: CGFloat = 146
+        static let tickFontSize: CGFloat = 10
+        static let boundaryTop: CGFloat = 8
+        static let boundaryBottom: CGFloat = 128
+        static let boundaryOpacity: Double = 0.12
+        static let sunPointRadius: CGFloat = 5
+        static let sunHaloRadius: CGFloat = 10
+        static let sunHaloOpacity: Double = 0.12
+        static let nowLineTop: CGFloat = 30
+        static let nowLineBottom: CGFloat = 128
+        static let nowLineOpacity: Double = 0.35
+        static let nowLineDash: [CGFloat] = [2, 4]
+        static let nowPointRadius: CGFloat = 6
+        static let nowHaloRadius: CGFloat = 14
+        static let nowHaloOpacity: Double = 0.18
+        static let nowLabelOffset = CGPoint(x: 11, y: 40)
+        static let nowLabelFontSize: CGFloat = 11
+    }
+
     // MARK: - 画面共通
 
     enum Screen {
