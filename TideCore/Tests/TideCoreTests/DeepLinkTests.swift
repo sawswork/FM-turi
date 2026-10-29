@@ -25,6 +25,8 @@ final class DeepLinkTests: XCTestCase {
     func testRoundTrip() {
         XCTAssertEqual(DeepLink(url: DeepLink.catchScreen.url), .catchScreen)
         XCTAssertEqual(DeepLink(url: DeepLink.home.url), .home)
+        XCTAssertEqual(DeepLink(url: DeepLink.zukan.url), .zukan)
+        XCTAssertEqual(DeepLink(url: DeepLink.tackle.url), .tackle)
     }
 
     func testBareSchemeIsHome() throws {

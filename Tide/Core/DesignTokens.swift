@@ -1,3 +1,4 @@
+// swiftlint:disable type_body_length
 import SwiftUI
 
 /// 付録A A-0 のトークン。画面はこの定数だけを使う（直書き禁止: SwiftLint `hex_color_outside_tokens`）。
@@ -541,6 +542,51 @@ enum DesignTokens {
         static let largeRoundIconSize: CGFloat = 20
     }
 
+    // MARK: - Tackle（A-6）
+
+    enum Tackle {
+        static let headingPadTop: CGFloat = 10
+        static let headingIconSize: CGFloat = 18
+        static let headingFontSize: CGFloat = 11
+        static let headingGap: CGFloat = 8
+        static let circlesRowHeight: CGFloat = 104
+        static let circlesPadTop: CGFloat = 8
+        static let circlesPadHorizontal: CGFloat = 32
+        static let circleDiameters: [CGFloat] = [38, 46, 56, 66, 78]
+        static let circleFontSizes: [CGFloat] = [13, 14, 15, 17, 19]
+        static let stockRowPadTop: CGFloat = 10
+        static let stockRowPadHorizontal: CGFloat = 32
+        static let stockColumnWidth: CGFloat = 52
+        static let stockGap: CGFloat = 6
+        static let stockFontSize: CGFloat = 13
+        static let stockMeterWidth: CGFloat = 34
+        static let stockMeterHeight: CGFloat = 4
+        static let hookHeadingPadTop: CGFloat = 28
+        static let hookGridPadTop: CGFloat = 8
+        static let hookGridGap: CGFloat = 10
+        static let hookColumnGap: CGFloat = 8
+        static let hookIconSizes: [CGFloat] = [20, 24, 28, 32]
+        static let hookLabelFontSize: CGFloat = 12
+        static let stepperHeight: CGFloat = 32
+        static let stepperRadius: CGFloat = 16
+        static let stepperButtonWidth: CGFloat = 30
+        static let stepperSignFontSize: CGFloat = 16
+        static let stepperValueMinWidth: CGFloat = 18
+        static let stepperValueFontSize: CGFloat = 14
+        static let matrixHeadingPadTop: CGFloat = 28
+        static let matrixGridPadTop: CGFloat = 8
+        static let matrixLabelColumnWidth: CGFloat = 36
+        static let matrixGap: CGFloat = 6
+        static let matrixRowHeight: CGFloat = 30
+        static let matrixHeaderFontSize: CGFloat = 11
+        static let matrixFishSize = CGSize(width: 22, height: 12)
+        static let matrixFishLineWidth: CGFloat = 2.2
+        static let matrixDotBase: CGFloat = 6
+        static let matrixDotScale: CGFloat = 3
+        static let matrixOrangeThreshold = 5
+        static let matrixWhiteThreshold = 3
+    }
+
     // MARK: - 画面共通
 
     enum Screen {
@@ -565,3 +611,5 @@ extension Color {
         )
     }
 }
+
+// swiftlint:enable type_body_length

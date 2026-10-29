@@ -18,6 +18,7 @@ struct WidgetsPreviewView: View {
                         card(height: Wdg.smallHeight) { WidgetHoursSmallView(snapshot: snapshot, now: now) }
                     }
                     card(height: Wdg.mediumHeight) { WidgetMediumView(snapshot: snapshot, now: now) }
+                    card(height: Wdg.largeHeight) { WidgetLargeView(snapshot: snapshot, now: now) }
                 }
                 .padding(.top, Wdg.pagePadTop)
                 .padding(.horizontal, Wdg.pagePadHorizontal)

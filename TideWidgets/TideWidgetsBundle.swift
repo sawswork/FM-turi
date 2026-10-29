@@ -7,5 +7,6 @@ struct TideWidgetsBundle: WidgetBundle {
         ScoreSmallWidget()
         HoursSmallWidget()
         ConditionsMediumWidget()
+        TackleLargeWidget()
     }
 }

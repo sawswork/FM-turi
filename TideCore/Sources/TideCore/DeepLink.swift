@@ -6,6 +6,10 @@ public enum DeepLink: Equatable, Sendable {
     case catchScreen
     /// Home を開く。
     case home
+    /// 図鑑を開く。
+    case zukan
+    /// Tackle を開く。
+    case tackle
 
     public static let scheme = "tide"
 
@@ -17,6 +21,8 @@ public enum DeepLink: Equatable, Sendable {
         switch target {
         case "catch": self = .catchScreen
         case "home", "": self = .home
+        case "zukan": self = .zukan
+        case "tackle": self = .tackle
         default: return nil
         }
     }
@@ -26,6 +32,8 @@ public enum DeepLink: Equatable, Sendable {
         switch self {
         case .catchScreen: URL(string: "\(Self.scheme)://catch")!
         case .home: URL(string: "\(Self.scheme)://home")!
+        case .zukan: URL(string: "\(Self.scheme)://zukan")!
+        case .tackle: URL(string: "\(Self.scheme)://tackle")!
         }
     }
 }

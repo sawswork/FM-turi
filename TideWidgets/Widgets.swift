@@ -42,3 +42,16 @@ struct ConditionsMediumWidget: Widget {
         .contentMarginsDisabled()
     }
 }
+
+struct TackleLargeWidget: Widget {
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: "jp.tide.app.widget.large", provider: TideTimelineProvider()) { entry in
+            WidgetLargeView(snapshot: entry.snapshot, now: entry.date)
+                .containerBackground(DesignTokens.Colors.surface, for: .widget)
+        }
+        .configurationDisplayName("潮位と在庫")
+        .description("潮位、シンカーとフックの在庫（−/+ で更新）")
+        .supportedFamilies([.systemLarge])
+        .contentMarginsDisabled()
+    }
+}

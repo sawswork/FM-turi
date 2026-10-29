@@ -71,6 +71,9 @@ targets:
       - path: Tide/Core/Components/MeterView.swift
       - path: Tide/Core/Components/MoonGlyph.swift
       - path: Tide/Data/WidgetBridge.swift
+      - path: Tide/Data/AppContainer.swift
+      - path: Tide/Data/Models
+      - path: Tide/Data/StockIntents.swift
       - path: Tide/Features/Widgets/Views
     dependencies:
       - package: TideCore
