@@ -48,7 +48,8 @@ final class HarmonicTideTests: XCTestCase {
     func testDayHasExtremesAndSun() {
         let constants = HarmonicTide.Constants(
             meanLevelCm: 90,
-            terms: [HarmonicTide.Term(name: "M2", amplitudeCm: 50, phaseDeg: 0), HarmonicTide.Term(name: "K1", amplitudeCm: 20, phaseDeg: 0)],
+            terms: [HarmonicTide.Term(name: "M2", amplitudeCm: 50, phaseDeg: 0),
+                    HarmonicTide.Term(name: "K1", amplitudeCm: 20, phaseDeg: 0)],
             fittedAt: Date(), sampleCount: 1000, rmsErrorCm: 1)
         let jst = TimeZone(identifier: "Asia/Tokyo")!
         let day = HarmonicTide.day(starting: Date(timeIntervalSince1970: 1_793_286_000), constants: constants,

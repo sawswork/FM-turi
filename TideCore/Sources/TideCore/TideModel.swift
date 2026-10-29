@@ -93,7 +93,7 @@ public struct MockTideProvider: TideProvider {
         let amplitude = 60.0
         let mean = 85.0
         // 2026-10-30 08:40 を満潮とする位相
-        let referenceHigh = Date(timeIntervalSince1970: 1_793_403_600) // 2026-10-30T08:40+09:00
+        let referenceHigh = Date(timeIntervalSince1970: 1_793_317_200) // 2026-10-30T08:40+09:00
         func level(_ date: Date) -> Double {
             mean + amplitude * cos(2 * .pi * date.timeIntervalSince(referenceHigh) / period)
         }

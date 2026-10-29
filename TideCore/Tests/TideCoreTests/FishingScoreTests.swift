@@ -64,7 +64,7 @@ final class FishingScoreTests: XCTestCase {
         let jst = TimeZone(identifier: "Asia/Tokyo")!
         var cal = Calendar(identifier: .gregorian)
         cal.timeZone = jst
-        let now = Date(timeIntervalSince1970: 1_793_424_600) // 2026-10-30T14:30+09:00
+        let now = Date(timeIntervalSince1970: 1_793_338_200) // 2026-10-30T14:30+09:00
         let dayStart = cal.startOfDay(for: now)
         let point = GeoPoint(latitude: 35.1352, longitude: 139.6079)
         let day = try await MockTideProvider().tide(at: point, from: dayStart, days: 1, timeZone: jst)[0]

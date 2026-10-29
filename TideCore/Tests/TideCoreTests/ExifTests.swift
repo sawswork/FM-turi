@@ -4,7 +4,7 @@ import XCTest
 final class ExifTests: XCTestCase {
     func testDateParsing() throws {
         let date = try XCTUnwrap(Exif.date(from: "2026:10:30 14:30:12"))
-        XCTAssertEqual(date, Date(timeIntervalSince1970: 1_793_424_612)) // 2026-10-30T14:30:12+09:00
+        XCTAssertEqual(date, Date(timeIntervalSince1970: 1_793_338_212)) // 2026-10-30T14:30:12+09:00
         XCTAssertNil(Exif.date(from: nil))
         XCTAssertNil(Exif.date(from: "2026-10-30"))
         XCTAssertNil(Exif.date(from: ""))
