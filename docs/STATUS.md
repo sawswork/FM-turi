@@ -2,16 +2,18 @@
 
 ## 現在地
 
-L1 開始（2026-10-29）
+L3 完了待ち（CI 確認中）→ 次は L4（2026-10-29）
 
 ## 次のループ
 
-L1: リポジトリ初期化、XcodeGen、CI3本、DesignTokens、5タブ＋空画面7つ、ディープリンク。CI緑で完了。
+L4: tide736、日出没、月齢、潮回り、Homeの3日横スクロール潮位グラフ。
 
 ## 既知の問題
 
-- 開発コンテナに Xcode/Swift がないため、SwiftUI 部分の検証は GitHub Actions（macos-latest）のみ。純粋ロジックは `TideCore` パッケージに置き ubuntu の `swift test` でも検証する（ADR-0002）。
-- macOS ランナーの無料枠（月約200分）のため、macOS ジョブはコミットメッセージに `[ios]` を含むとき（各ループの終了コミット・CI修正）だけ走る（ADR-0002）。
+- 開発コンテナに Xcode/Swift がないため、SwiftUI 部分の検証は GitHub Actions（macos-latest、約3分/回）のみ。純粋ロジックは `TideCore` に置き ubuntu の `swift test` でも検証する（ADR-0002）。
+- macOS ジョブはコミットメッセージに `[ios]` を含むときだけ走る（ADR-0002）。
+- 実機では L16 まで WeatherKit が使えないため、気象は固定値モックに退避する（ADR-0003）。Detail に由来を出す。
+- tide736.net は開発コンテナから到達できない（API 仕様は公開ドキュメントに基づき実装し、CI では固定レスポンスでテスト）。
 
 ## 最後に私がやること
 
