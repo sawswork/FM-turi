@@ -1,5 +1,5 @@
-@testable import Tide
 import SwiftData
+@testable import Tide
 import TideCore
 import XCTest
 

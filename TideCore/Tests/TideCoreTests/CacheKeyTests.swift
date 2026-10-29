@@ -5,8 +5,8 @@ final class CacheKeyTests: XCTestCase {
     let base = Date(timeIntervalSince1970: 1_792_000_000) // 2026-10-14T...
 
     func testSamePointSameHourGivesSameKey() {
-        let a = GeoPoint(latitude: 35.1351, longitude: 139.6149)
-        let b = GeoPoint(latitude: 35.1389, longitude: 139.6201) // 0.01° 丸めで同じ
+        let a = GeoPoint(latitude: 35.1351, longitude: 139.6161)
+        let b = GeoPoint(latitude: 35.1389, longitude: 139.6239) // 0.01° 丸めで同じ
         let key1 = CacheKey.make(point: a, date: base)
         let key2 = CacheKey.make(point: b, date: base.addingTimeInterval(600))
         XCTAssertEqual(key1, key2)

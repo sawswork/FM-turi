@@ -30,7 +30,10 @@ final class OpenMeteoMarineTests: XCTestCase {
     }
 
     func testEmptyIsError() {
-        let json = #"{"hourly":{"time":[],"wave_height":[],"wave_period":[],"swell_wave_height":[],"swell_wave_direction":[],"sea_surface_temperature":[]}}"#
+        let json = """
+        {"hourly":{"time":[],"wave_height":[],"wave_period":[],"swell_wave_height":[],
+        "swell_wave_direction":[],"sea_surface_temperature":[]}}
+        """
         XCTAssertThrowsError(try OpenMeteoMarine.parse(Data(json.utf8), fetchedAt: Date()))
     }
 
