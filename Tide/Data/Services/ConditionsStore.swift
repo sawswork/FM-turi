@@ -47,33 +47,56 @@ final class ConditionsStore {
         #endif
     }
 
+    /// 任意地点の条件（キャッシュ優先）。画面の状態は変えない。
+    struct Snapshot: Sendable {
+        var weather: WeatherSnapshot?
+        var weatherSource: String?
+        var marine: MarineSnapshot?
+        var marineSource: String?
+        var marineSeries: [MarineSnapshot]
+    }
+
     func load(point: GeoPoint, at date: Date = Date()) async {
         isLoading = true
         defer { isLoading = false }
-        await loadWeather(point: point, at: date)
-        await loadMarine(point: point, at: date)
+        let snapshot = await snapshot(for: point, at: date)
+        weather = snapshot.weather
+        weatherSource = snapshot.weatherSource
+        marine = snapshot.marine
+        marineSource = snapshot.marineSource
+        marineSeries = snapshot.marineSeries
+    }
+
+    func snapshot(for point: GeoPoint, at date: Date = Date()) async -> Snapshot {
+        let (weather, weatherSource) = await fetchWeather(point: point, at: date)
+        let marine = await fetchMarine(point: point, at: date)
+        return Snapshot(weather: weather, weatherSource: weatherSource,
+                        marine: marine.current, marineSource: marine.source, marineSeries: marine.series)
     }
 
     // MARK: - Weather
 
-    private func loadWeather(point: GeoPoint, at date: Date) async {
+    private func fetchWeather(point: GeoPoint, at date: Date) async -> (WeatherSnapshot?, String?) {
         let key = CacheKey.make(point: point, date: date)
         if let cached = weatherRecord(key: key) {
-            weather = cached.snapshot
-            weatherSource = cached.source
-            return
+            return (cached.snapshot, cached.source)
         }
         do {
             let snapshot = try await weatherProvider.weather(at: point, for: date)
-            store(snapshot, key: key, point: point, source: Self.sourceName(weatherProvider))
+            let source = Self.sourceName(weatherProvider)
+            store(snapshot, key: key, point: point, source: source)
+            return (snapshot, source)
         } catch {
             logger.notice("気象の取得に失敗、退避: \(error.localizedDescription, privacy: .public)")
             if let latest = latestWeatherRecord(near: point) {
-                weather = latest.snapshot
-                weatherSource = latest.source
-            } else if let snapshot = try? await fallbackWeather.weather(at: point, for: date) {
-                store(snapshot, key: key, point: point, source: Self.sourceName(fallbackWeather))
+                return (latest.snapshot, latest.source)
             }
+            if let snapshot = try? await fallbackWeather.weather(at: point, for: date) {
+                let source = Self.sourceName(fallbackWeather)
+                store(snapshot, key: key, point: point, source: source)
+                return (snapshot, source)
+            }
+            return (nil, nil)
         }
     }
 
@@ -81,8 +104,6 @@ final class ConditionsStore {
         let record = WeatherRecord(key: key, point: point.rounded, snapshot: snapshot, source: source)
         context.insert(record)
         save()
-        weather = snapshot
-        weatherSource = source
     }
 
     private func weatherRecord(key: String) -> WeatherRecord? {
@@ -105,7 +126,8 @@ final class ConditionsStore {
 
     // MARK: - Marine
 
-    private func loadMarine(point: GeoPoint, at date: Date) async {
+    private func fetchMarine(point: GeoPoint,
+                             at date: Date) async -> (current: MarineSnapshot?, series: [MarineSnapshot], source: String?) {
         let key = CacheKey.make(point: point, date: date)
         if marineRecord(key: key) == nil {
             do {
@@ -120,13 +142,11 @@ final class ConditionsStore {
             }
         }
         let series = marineSeries(near: point, around: date)
-        marineSeries = series.map(\.snapshot)
         let bucket = CacheKey.bucketStart(date)
         let current = series.first { $0.validAt == bucket } ?? series.min {
             abs($0.validAt.timeIntervalSince(date)) < abs($1.validAt.timeIntervalSince(date))
         }
-        marine = current?.snapshot
-        marineSource = current?.source
+        return (current?.snapshot, series.map(\.snapshot), current?.source)
     }
 
     private func storeMarine(_ rows: [MarineSnapshot], point: GeoPoint, source: String) {

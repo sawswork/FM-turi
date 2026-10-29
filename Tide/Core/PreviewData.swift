@@ -25,6 +25,8 @@ enum PreviewData {
                                             marineProvider: MockMarineProvider())
 
     static let tide = TideStore(context: container.mainContext, provider: MockTideProvider())
+
+    static let spots = SpotsStore(context: container.mainContext)
 }
 
 extension View {
@@ -37,6 +39,7 @@ extension View {
             .environment(PreviewData.location)
             .environment(PreviewData.conditions)
             .environment(PreviewData.tide)
+            .environment(PreviewData.spots)
             .preferredColorScheme(.dark)
     }
 }

@@ -379,6 +379,49 @@ enum DesignTokens {
         static let recordThumbRadius: CGFloat = 8
     }
 
+    // MARK: - 釣り場（A-4）
+
+    enum Spots {
+        static let mapHeight: CGFloat = 340
+        static let mapMarginTop: CGFloat = 8
+        static let currentDotRadius: CGFloat = 3
+        static let currentHaloRadius: CGFloat = 12
+        static let currentHaloOpacity: Double = 0.08
+        static let candidateSize: CGFloat = 6
+        static let candidateTapSize: CGFloat = 28
+        static let candidateSelectedSize: CGFloat = 10
+        static let popupOffsetX: CGFloat = 22
+        static let popupHeight: CGFloat = 44
+        static let popupRadius: CGFloat = 22
+        static let popupPadLeading: CGFloat = 14
+        static let popupPadTrailing: CGFloat = 6
+        static let popupGap: CGFloat = 10
+        static let popupNameFontSize: CGFloat = 13
+        static let popupScoreFontSize: CGFloat = 16
+        static let popupButtonSize: CGFloat = 32
+        static let popupButtonIconSize: CGFloat = 16
+        static let popupButtonLineWidth: CGFloat = 2.4
+        static let badgeSize: CGFloat = 52
+        static let badgeOuterRadius: CGFloat = 22
+        static let badgeRingRadius: CGFloat = 20
+        static let badgeRingLineWidth: CGFloat = 4
+        static let badgeFontSize: CGFloat = 15
+        static let listPadTop: CGFloat = 10
+        static let rowHeight: CGFloat = 56
+        static let rowGap: CGFloat = 12
+        static let rowDotSize: CGFloat = 8
+        static let rowNameFontSize: CGFloat = 14
+        static let rowDistanceFontSize: CGFloat = 12
+        static let rowWindIconSize: CGFloat = 16
+        static let rowScoreWidth: CGFloat = 30
+        static let rowScoreFontSize: CGFloat = 16
+        static let goodScore = 60
+        static let searchSpanDegrees: Double = 0.2
+        static let searchRadiusMeters: Double = 15_000
+        static let researchDistanceMeters: Double = 5_000
+        static let researchInterval: TimeInterval = 7 * 86_400
+    }
+
     // MARK: - 画面共通
 
     enum Screen {

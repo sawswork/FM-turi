@@ -11,11 +11,16 @@ final class Spot {
     var longitude: Double
     var isRegistered: Bool
     var createdAt: Date
-    /// tide736 の港コード等（L4 で使用）。
+    /// tide736 の港コード等。
     var tideStationCode: String?
+    /// "seed" / "mapkit" / "tide736" / "user"
+    var source: String
+    /// 候補として検索した時刻（再検索の抑止に使う）
+    var searchedAt: Date?
 
     init(id: UUID = UUID(), name: String, latitude: Double, longitude: Double,
-         isRegistered: Bool, createdAt: Date = Date(), tideStationCode: String? = nil) {
+         isRegistered: Bool, createdAt: Date = Date(), tideStationCode: String? = nil,
+         source: String = "seed", searchedAt: Date? = nil) {
         self.id = id
         self.name = name
         self.latitude = latitude
@@ -23,6 +28,8 @@ final class Spot {
         self.isRegistered = isRegistered
         self.createdAt = createdAt
         self.tideStationCode = tideStationCode
+        self.source = source
+        self.searchedAt = searchedAt
     }
 
     var point: GeoPoint {

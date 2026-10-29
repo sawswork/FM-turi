@@ -40,30 +40,37 @@ final class TideStore {
     func load(point: GeoPoint, now: Date = Date(), timeZone: TimeZone = Tide736.timeZone) async {
         isLoading = true
         defer { isLoading = false }
+        let result = await days(for: point, now: now, timeZone: timeZone)
+        stationName = result.stationName
+        days = result.days
+    }
+
+    /// 任意地点の潮汐（キャッシュ優先）。画面の状態は変えない。
+    func days(for point: GeoPoint, now: Date = Date(),
+              timeZone: TimeZone = Tide736.timeZone) async -> (days: [TideDay], stationName: String?) {
         var cal = Calendar(identifier: .gregorian)
         cal.timeZone = timeZone
         let dayStart = cal.startOfDay(for: now)
         let station = Tide736.nearestPort(to: point)
         let code = station?.code ?? "none"
-        stationName = station?.name
         let keys = (0..<Self.dayCount).map { index in
             TideDayRecord.key(stationCode: code, dayStart: dayStart.addingTimeInterval(TimeInterval(index) * 86_400), timeZone: timeZone)
         }
         let cached = keys.compactMap { record(key: $0)?.day }
         if cached.count == keys.count {
-            days = cached
-            return
+            return (cached, station?.name)
         }
         do {
             let fetched = try await provider.tide(at: point, from: dayStart, days: Self.dayCount, timeZone: timeZone)
             store(fetched, code: code, timeZone: timeZone)
-            days = fetched
+            return (fetched, station?.name)
         } catch {
             logger.notice("潮汐の取得に失敗、退避: \(error.localizedDescription, privacy: .public)")
             if let fetched = try? await fallback.tide(at: point, from: dayStart, days: Self.dayCount, timeZone: timeZone) {
                 store(fetched, code: code, timeZone: timeZone)
-                days = fetched
+                return (fetched, station?.name)
             }
+            return ([], station?.name)
         }
     }
 

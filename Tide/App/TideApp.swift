@@ -7,6 +7,7 @@ struct TideApp: App {
     @State private var location: LocationService
     @State private var conditions: ConditionsStore
     @State private var tide: TideStore
+    @State private var spots: SpotsStore
     private let container: ModelContainer
 
     init() {
@@ -15,6 +16,7 @@ struct TideApp: App {
         _location = State(initialValue: LocationService())
         _conditions = State(initialValue: ConditionsStore.live(context: container.mainContext))
         _tide = State(initialValue: TideStore.live(context: container.mainContext))
+        _spots = State(initialValue: SpotsStore(context: container.mainContext))
         SeedData.seedIfNeeded(context: container.mainContext)
     }
 
@@ -28,5 +30,6 @@ struct TideApp: App {
         .environment(location)
         .environment(conditions)
         .environment(tide)
+        .environment(spots)
     }
 }
