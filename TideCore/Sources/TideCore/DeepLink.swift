@@ -1,9 +1,11 @@
 import Foundation
 
-/// アプリのディープリンク。`tide://catch` → `.catchScreen`。
+/// アプリのディープリンク。`tide://catch` → `.catchScreen`、`tide://home` → `.home`。
 public enum DeepLink: Equatable, Sendable {
     /// Catch 画面を開く（ウィジェットのカメラボタン）。
     case catchScreen
+    /// Home を開く。
+    case home
 
     public static let scheme = "tide"
 
@@ -14,6 +16,7 @@ public enum DeepLink: Equatable, Sendable {
         let target = host.isEmpty ? path : host
         switch target {
         case "catch": self = .catchScreen
+        case "home", "": self = .home
         default: return nil
         }
     }
@@ -22,6 +25,7 @@ public enum DeepLink: Equatable, Sendable {
     public var url: URL {
         switch self {
         case .catchScreen: URL(string: "\(Self.scheme)://catch")!
+        case .home: URL(string: "\(Self.scheme)://home")!
         }
     }
 }

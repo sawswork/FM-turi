@@ -24,6 +24,7 @@ enum AppTab: Int, CaseIterable, Identifiable, Sendable {
     init(deepLink: DeepLink) {
         switch deepLink {
         case .catchScreen: self = .catchFish
+        case .home: self = .home
         }
     }
 }

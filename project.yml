@@ -30,6 +30,12 @@ targets:
       - path: Tide
     dependencies:
       - package: TideCore
+      - target: TideWidgets
+    entitlements:
+      path: Tide/Tide.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.jp.tide.app
     info:
       path: Tide/Info.plist
       properties:
@@ -53,6 +59,39 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         GENERATE_INFOPLIST_FILE: "NO"
+  TideWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: TideWidgets
+      - path: Tide/Core/DesignTokens.swift
+      - path: Tide/Core/TimeFormat.swift
+      - path: Tide/Core/Icons
+      - path: Tide/Core/Components/RingView.swift
+      - path: Tide/Core/Components/MeterView.swift
+      - path: Tide/Core/Components/MoonGlyph.swift
+      - path: Tide/Data/WidgetBridge.swift
+      - path: Tide/Features/Widgets/Views
+    dependencies:
+      - package: TideCore
+      - sdk: WidgetKit.framework
+      - sdk: SwiftUI.framework
+    entitlements:
+      path: TideWidgets/TideWidgets.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.jp.tide.app
+    info:
+      path: TideWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: Tide
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: jp.tide.app.widgets
+        GENERATE_INFOPLIST_FILE: "NO"
+        SKIP_INSTALL: "YES"
   TideTests:
     type: bundle.unit-test
     platform: iOS
@@ -73,6 +112,7 @@ schemes:
     build:
       targets:
         Tide: all
+        TideWidgets: all
         TideTests: [test]
     run:
       config: Debug

@@ -24,9 +24,22 @@ struct HomeScore {
     struct Meter: Identifiable {
         let icon: TideIcon
         let fraction: Double
-        let color: Color
+        /// "orange" / "green" / "white"
+        let colorKey: String
         let rotation: Angle
         var id: String { "\(icon)" }
+        var color: Color { DesignTokens.Colors.named(colorKey) }
+
+        init(icon: TideIcon, fraction: Double, colorKey: String, rotation: Angle) {
+            self.icon = icon
+            self.fraction = fraction
+            self.colorKey = colorKey
+            self.rotation = rotation
+        }
+
+        var widgetMeter: WidgetSnapshot.Meter {
+            WidgetSnapshot.Meter(key: "\(icon)", fraction: fraction, color: colorKey, rotationDegrees: rotation.degrees)
+        }
     }
 
     var meters: [Meter] {
@@ -38,18 +51,11 @@ struct HomeScore {
         let trend = weather?.pressureTrend3h ?? 0
         let pressureFraction = min(abs(trend) / (2 * FishingScore.pressureSpan), 1)
         return [
-            Meter(icon: .wind, fraction: windFraction,
-                  color: windFraction >= 0.5 ? DesignTokens.Colors.orange : DesignTokens.Colors.primary,
+            Meter(icon: .wind, fraction: windFraction, colorKey: windFraction >= 0.5 ? "orange" : "white",
                   rotation: .degrees(((weather?.windDirection ?? 40) + 180).truncatingRemainder(dividingBy: 360))),
-            Meter(icon: .wave, fraction: waveFraction,
-                  color: waveFraction >= 0.5 ? DesignTokens.Colors.orange : DesignTokens.Colors.primary,
-                  rotation: .zero),
-            Meter(icon: .drop, fraction: sstFraction,
-                  color: sstFraction >= 0.5 ? DesignTokens.Colors.green : DesignTokens.Colors.primary,
-                  rotation: .zero),
-            Meter(icon: .pressure, fraction: pressureFraction,
-                  color: trend < 0 ? DesignTokens.Colors.green : DesignTokens.Colors.primary,
-                  rotation: .zero)
+            Meter(icon: .wave, fraction: waveFraction, colorKey: waveFraction >= 0.5 ? "orange" : "white", rotation: .zero),
+            Meter(icon: .drop, fraction: sstFraction, colorKey: sstFraction >= 0.5 ? "green" : "white", rotation: .zero),
+            Meter(icon: .pressure, fraction: pressureFraction, colorKey: trend < 0 ? "green" : "white", rotation: .zero)
         ]
     }
 }

@@ -30,6 +30,15 @@ enum DesignTokens {
         static let land = Color(hex: 0x0E0E10)
         /// 黒（アクティブ要素上の文字・アイコン）
         static let black = Color(hex: 0x000000)
+
+        /// ウィジェットに渡す色名（"orange" / "green" / "white"）→ 色。
+        static func named(_ key: String) -> Color {
+            switch key {
+            case "orange": orange
+            case "green": green
+            default: primary
+            }
+        }
     }
 
     // MARK: - フォント（SF Pro、数字は等幅）
@@ -435,6 +444,101 @@ enum DesignTokens {
         static let buttonIconSize: CGFloat = 26
         static let buttonIconLineWidth: CGFloat = 2.2
         static let padBottom: CGFloat = 24
+    }
+
+    // MARK: - ウィジェット（A-7）
+
+    enum Widgets {
+        static let cornerRadius: CGFloat = 28
+        static let pagePadTop: CGFloat = 64
+        static let pagePadHorizontal: CGFloat = 20
+        static let pageGap: CGFloat = 16
+        static let smallHeight: CGFloat = 167
+        static let mediumHeight: CGFloat = 167
+        static let largeHeight: CGFloat = 372
+        // 小A
+        static let smallRingSize: CGFloat = 104
+        static let smallRingRadius: CGFloat = 44
+        static let smallRingLineWidth: CGFloat = 9
+        static let smallNumberFontSize: CGFloat = 36
+        static let smallNameTop: CGFloat = 6
+        static let smallPinSize: CGFloat = 10
+        static let smallNameFontSize: CGFloat = 11
+        static let smallNameGap: CGFloat = 4
+        // 小B
+        static let hoursPadTop: CGFloat = 18
+        static let hoursPadHorizontal: CGFloat = 16
+        static let hoursPadBottom: CGFloat = 16
+        static let hoursMoonSize: CGFloat = 18
+        static let hoursLabelFontSize: CGFloat = 11
+        static let hoursBarHeight: CGFloat = 54
+        static let hoursBarGap: CGFloat = 3
+        static let hoursBarRadius: CGFloat = 2
+        static let hoursBarBase: CGFloat = 6
+        static let hoursBarScale: CGFloat = 0.55
+        static let hoursCameraHeight: CGFloat = 34
+        static let hoursCameraRadius: CGFloat = 17
+        static let hoursCameraIconSize: CGFloat = 18
+        // 中
+        static let mediumPadVertical: CGFloat = 16
+        static let mediumPadHorizontal: CGFloat = 18
+        static let mediumGap: CGFloat = 18
+        static let mediumRingSize: CGFloat = 120
+        static let mediumRingRadius: CGFloat = 50
+        static let mediumRingLineWidth: CGFloat = 10
+        static let mediumNumberFontSize: CGFloat = 40
+        static let mediumRightGap: CGFloat = 12
+        static let mediumIconSize: CGFloat = 18
+        static let mediumIconLineWidth: CGFloat = 2
+        static let mediumMeterWidth: CGFloat = 26
+        static let mediumMeterHeight: CGFloat = 3
+        static let mediumButtonGap: CGFloat = 8
+        static let mediumCameraHeight: CGFloat = 38
+        static let mediumCameraRadius: CGFloat = 19
+        static let mediumCameraIconSize: CGFloat = 20
+        static let mediumRoundSize: CGFloat = 38
+        static let mediumRoundIconSize: CGFloat = 16
+        // 大
+        static let largePadVertical: CGFloat = 16
+        static let largePadHorizontal: CGFloat = 18
+        static let largeGap: CGFloat = 10
+        static let largePinSize: CGFloat = 12
+        static let largeTitleFontSize: CGFloat = 12
+        static let largeCurveSize = CGSize(width: 318, height: 78)
+        static let largeCurveLineWidth: CGFloat = 2
+        static let largeCurveTop: CGFloat = 18
+        static let largeCurveBottom: CGFloat = 70
+        static let largeCurveFillOpacity: Double = 0.05
+        static let largeNowRadius: CGFloat = 5
+        static let largeNowHaloRadius: CGFloat = 10
+        static let largeNowHaloOpacity: Double = 0.18
+        static let largeNowLabelOffset = CGPoint(x: 8, y: -14)
+        static let largeNowLabelFontSize: CGFloat = 10
+        static let largeTickX: [CGFloat] = [0, 76, 155, 234]
+        static let largeTickY: CGFloat = 76
+        static let largeTickFontSize: CGFloat = 9
+        static let largeSinkerGap: CGFloat = 6
+        static let largeSinkerIconSize: CGFloat = 10
+        static let largeStockLabelFontSize: CGFloat = 11
+        static let largeSinkerStepperHeight: CGFloat = 32
+        static let largeSinkerStepperRadius: CGFloat = 16
+        static let largeSinkerStepperButtonWidth: CGFloat = 20
+        static let largeSinkerStepperSignFontSize: CGFloat = 14
+        static let largeSinkerStepperValueFontSize: CGFloat = 13
+        static let largeSinkerLowThreshold = 3
+        static let largeHookGap: CGFloat = 8
+        static let largeHookStepperHeight: CGFloat = 34
+        static let largeHookStepperRadius: CGFloat = 17
+        static let largeHookStepperButtonWidth: CGFloat = 26
+        static let largeHookStepperSignFontSize: CGFloat = 15
+        static let largeHookStepperValueFontSize: CGFloat = 14
+        static let largeHookLowThreshold = 5
+        static let largeBottomGap: CGFloat = 8
+        static let largeCameraHeight: CGFloat = 44
+        static let largeCameraRadius: CGFloat = 22
+        static let largeCameraIconSize: CGFloat = 22
+        static let largeRoundSize: CGFloat = 44
+        static let largeRoundIconSize: CGFloat = 20
     }
 
     // MARK: - 画面共通

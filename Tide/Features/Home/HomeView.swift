@@ -8,6 +8,7 @@ struct HomeView: View {
     @Environment(ConditionsStore.self) private var conditions
     @Environment(TideStore.self) private var tide
     @Query(filter: #Predicate<Spot> { $0.isRegistered }) private var spots: [Spot]
+    @Query(sort: \TackleItem.sortOrder) private var tackle: [TackleItem]
     @State private var selectedDay = 0
     @State private var showDetail = false
 
@@ -67,7 +68,35 @@ struct HomeView: View {
         .task(id: targetPoint) {
             await conditions.load(point: targetPoint)
             await tide.load(point: targetPoint)
+            publishWidgetSnapshot()
         }
+    }
+
+    /// ウィジェット用に今日の値を App Group へ書き出す。
+    private func publishWidgetSnapshot() {
+        let now = Date()
+        let score = score(now: now)
+        let band = Species.defaultForScore.band
+        let hourly = tide.today.map {
+            FishingScore.hourlyTotals(day: $0, weather: conditions.weather, marineSeries: conditions.marineSeries, band: band)
+        } ?? Array(repeating: score.result.total, count: 24)
+        var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = Tide736.timeZone
+        let snapshot = WidgetSnapshot(
+            spotName: spotName,
+            total: score.result.total,
+            hourly: hourly,
+            meters: score.meters.map(\.widgetMeter),
+            moonAge: tide.today?.moonAge ?? MoonCalc.age(at: now),
+            tideTypeLabel: tide.today?.tideType.label ?? MoonCalc.tideType(age: MoonCalc.age(at: now)).label,
+            isRising: tide.today?.isRising(at: now) ?? true,
+            tideLevels: tide.today?.hourlyLevels ?? [],
+            sinkers: tackle.filter { $0.kind == .sinker }.map { WidgetSnapshot.Stock(label: $0.label, count: $0.stock) },
+            hooks: tackle.filter { $0.kind == .hook }.map { WidgetSnapshot.Stock(label: $0.label, count: $0.stock) },
+            dayStart: tide.today?.dayStart ?? cal.startOfDay(for: now),
+            generatedAt: now
+        )
+        WidgetBridge.save(snapshot)
     }
 
     private func currentHour(_ date: Date) -> Int {

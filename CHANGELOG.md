@@ -2,6 +2,20 @@
 
 ループごとの記録（指示書 §7 の形式）。新しいものが上。
 
+## L11 2026-10-29
+やったこと:
+- ウィジェット拡張（TideWidgets、WidgetKit）: 小A（リング104＋釣れ率＋釣り場名）、小B（月相＋潮回り↑↓、24本バー、カメラピル）、中（リング120＋4条件メーター＋カメラピル／dots）
+- アプリ→ウィジェットは App Group（group.jp.tide.app）の UserDefaults に WidgetSnapshot（TideCore）を書き出し、WidgetCenter で再読み込み。ウィジェットは SwiftData を読まない。毎正時にエントリを切り替え、時間ごとの釣れ率を表示
+- カメラピル→ tide://catch、dots／小A全体→ tide://home（DeepLink に home を追加）
+- Features/Widgets の WidgetsPreviewView を A-7 のレイアウト確認ページに
+- project.yml: TideWidgets ターゲット、App Group の entitlements（TestFlight 時に App ID 側の有効化が必要 → OWNER_TASKS）
+- 注: GitHub Actions 停止中のため CI 未検証
+確認ポイント（最後に私が実機で見るところ、最大3つ）:
+- [ホーム画面] ウィジェット追加 → 「Tide」に小2種・中1種。アプリを一度開くと実データに変わる
+- [ウィジェット小B] カメラピルをタップ → アプリが Catch 画面で開く
+- [ウィジェット中] 4条件のメーター色が Home と同じ
+仕様から外れた判断: ADR-0010（ウィジェットはアプリが書き出したスナップショットだけを使う）
+
 ## L10 2026-10-29
 やったこと:
 - 潮汐の端末内計算（TideCore.HarmonicTide）: M2, S2, N2, K1, O1, Q1 を最小二乗で当て、K2・P1 を標準比で推定した 8 分潮。調和定数は港ごとに tide736 の 30 日分の予測値から当てはめて SwiftData に保存し、以後その港の潮汐は通信なしで計算（source="harmonic"）。残差 RMS が 6cm を超えるときは採用しない

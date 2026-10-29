@@ -24,5 +24,11 @@ final class DeepLinkTests: XCTestCase {
 
     func testRoundTrip() {
         XCTAssertEqual(DeepLink(url: DeepLink.catchScreen.url), .catchScreen)
+        XCTAssertEqual(DeepLink(url: DeepLink.home.url), .home)
+    }
+
+    func testBareSchemeIsHome() throws {
+        let url = try XCTUnwrap(URL(string: "tide://"))
+        XCTAssertEqual(DeepLink(url: url), .home)
     }
 }

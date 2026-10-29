@@ -28,10 +28,10 @@ struct ConditionsGrid: View {
     ZStack {
         DesignTokens.Colors.background.ignoresSafeArea()
         ConditionsGrid(meters: [
-            HomeScore.Meter(icon: .wind, fraction: 0.6, color: DesignTokens.Colors.orange, rotation: .degrees(40)),
-            HomeScore.Meter(icon: .wave, fraction: 0.22, color: DesignTokens.Colors.primary, rotation: .zero),
-            HomeScore.Meter(icon: .drop, fraction: 0.8, color: DesignTokens.Colors.green, rotation: .zero),
-            HomeScore.Meter(icon: .pressure, fraction: 0.45, color: DesignTokens.Colors.green, rotation: .zero)
+            HomeScore.Meter(icon: .wind, fraction: 0.6, colorKey: "orange", rotation: .degrees(40)),
+            HomeScore.Meter(icon: .wave, fraction: 0.22, colorKey: "white", rotation: .zero),
+            HomeScore.Meter(icon: .drop, fraction: 0.8, colorKey: "green", rotation: .zero),
+            HomeScore.Meter(icon: .pressure, fraction: 0.45, colorKey: "green", rotation: .zero)
         ])
     }
 }
