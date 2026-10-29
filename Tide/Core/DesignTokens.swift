@@ -265,6 +265,87 @@ enum DesignTokens {
         static let nowLabelFontSize: CGFloat = 11
     }
 
+    // MARK: - Catch（A-2）
+
+    enum Catch {
+        static let photoHeight: CGFloat = 480
+        static let photoBottomRadius: CGFloat = 36
+        static let guideLineWidth: CGFloat = 1.5
+        static let guideOpacity: Double = 0.22
+        static let guideFillOpacity: Double = 0.04
+        static let guideSize = CGSize(width: 200, height: 96)
+        static let bracketRadius: CGFloat = 14
+        static let bracketLineWidth: CGFloat = 2
+        static let bracketLength: CGFloat = 28
+        static let bracketTopLeft = CGPoint(x: 48, y: 96)
+        static let bracketTopRight = CGPoint(x: 310, y: 64)
+        static let bracketBottomLeft = CGPoint(x: 48, y: 400)
+        static let bracketBottomRight = CGPoint(x: 352, y: 400)
+        static let dottedY: CGFloat = 260
+        static let dottedX0: CGFloat = 62
+        static let dottedX1: CGFloat = 328
+        static let dottedOpacity: Double = 0.35
+        static let dottedDash: [CGFloat] = [2, 6]
+        static let closeTop: CGFloat = 26
+        static let closeLeft: CGFloat = 24
+        static let closeSize: CGFloat = 36
+        static let closeIconSize: CGFloat = 16
+        static let chipTop: CGFloat = 30
+        static let chipRight: CGFloat = 24
+        static let chipHeight: CGFloat = 28
+        static let chipRadius: CGFloat = 14
+        static let chipPadLeading: CGFloat = 10
+        static let chipPadTrailing: CGFloat = 12
+        static let chipGap: CGFloat = 6
+        static let chipPinSize: CGFloat = 12
+        static let chipPinLineWidth: CGFloat = 2.2
+        static let chipFontSize: CGFloat = 11
+        static let sizePillLeft: CGFloat = 24
+        static let sizePillBottom: CGFloat = 22
+        static let sizePillHeight: CGFloat = 44
+        static let sizePillRadius: CGFloat = 22
+        static let sizePillPadLeading: CGFloat = 14
+        static let sizePillPadTrailing: CGFloat = 18
+        static let sizePillGap: CGFloat = 10
+        static let sizePillIconSize: CGFloat = 18
+        static let sizePillFontSize: CGFloat = 22
+        static let sizePillFieldWidth: CGFloat = 44
+        static let aiRingRight: CGFloat = 24
+        static let aiRingBottom: CGFloat = 22
+        static let aiRingSize: CGFloat = 44
+        static let aiRingInner: CGFloat = 30
+        static let aiRingRadius: CGFloat = 12
+        static let aiRingLineWidth: CGFloat = 2.5
+        static let aiRingDotRadius: CGFloat = 2.5
+        static let candidateColumns = 3
+        static let candidateGap: CGFloat = 10
+        static let candidatePadTop: CGFloat = 18
+        static let candidateHeight: CGFloat = 64
+        static let candidateRadius: CGFloat = 20
+        static let candidateFishSize = CGSize(width: 56, height: 30)
+        static let candidateLineWidth: CGFloat = 1.8
+        static let autoPadTop: CGFloat = 18
+        static let autoPadHorizontal: CGFloat = 36
+        static let autoGap: CGFloat = 10
+        static let autoVerticalGap: CGFloat = 8
+        static let autoIconSize: CGFloat = 20
+        static let autoFontSize: CGFloat = 16
+        static let miniCurveSize = CGSize(width: 26, height: 16)
+        static let tacklePadTop: CGFloat = 18
+        static let tackleGap: CGFloat = 8
+        static let tackleHeight: CGFloat = 34
+        static let tackleRadius: CGFloat = 17
+        static let tacklePadHorizontal: CGFloat = 14
+        static let tackleInnerGap: CGFloat = 6
+        static let tackleIconSize: CGFloat = 14
+        static let tackleFontSize: CGFloat = 13
+        static let saveHeight: CGFloat = 60
+        static let saveRadius: CGFloat = 30
+        static let saveIconSize: CGFloat = 26
+        static let saveIconLineWidth: CGFloat = 2.2
+        static let savePadBottom: CGFloat = 24
+    }
+
     // MARK: - 画面共通
 
     enum Screen {

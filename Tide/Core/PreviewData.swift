@@ -14,6 +14,7 @@ enum PreviewData {
         return container
     }()
 
+    static let router = AppRouter()
     static let location = LocationService()
 
     static let conditions = ConditionsStore(context: container.mainContext,
@@ -29,6 +30,7 @@ extension View {
     func previewEnvironment() -> some View {
         self
             .modelContainer(PreviewData.container)
+            .environment(PreviewData.router)
             .environment(PreviewData.location)
             .environment(PreviewData.conditions)
             .environment(PreviewData.tide)

@@ -4,31 +4,34 @@ import TideCore
 
 /// 5タブのルート。タブバーは付録A A-0 のカスタム実装。
 struct RootView: View {
-    @State private var selectedTab: AppTab = .home
+    @Environment(AppRouter.self) private var router
     private let logger = Logger(subsystem: "jp.tide.app", category: "RootView")
 
     var body: some View {
+        @Bindable var router = router
         ZStack(alignment: .bottom) {
             DesignTokens.Colors.background
                 .ignoresSafeArea()
 
-            screen
+            screen(for: router.selectedTab)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-            TabBarView(selected: $selectedTab)
+            if router.selectedTab != .catchFish {
+                TabBarView(selected: $router.selectedTab)
+            }
         }
         .onOpenURL { url in
             guard let link = DeepLink(url: url) else {
                 logger.notice("未対応のURL: \(url.absoluteString, privacy: .public)")
                 return
             }
-            selectedTab = AppTab(deepLink: link)
+            router.handle(link)
         }
     }
 
     @ViewBuilder
-    private var screen: some View {
-        switch selectedTab {
+    private func screen(for tab: AppTab) -> some View {
+        switch tab {
         case .home: HomeView()
         case .spots: SpotsView()
         case .catchFish: CatchView()

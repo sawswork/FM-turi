@@ -5,7 +5,7 @@ import SwiftData
 /// SwiftData コンテナ。App Group（group.jp.tide.app）上に置き、ウィジェットと共有する（L11）。
 enum AppContainer {
     static let appGroupID = "group.jp.tide.app"
-    static var schema: Schema { Schema([Spot.self, WeatherRecord.self, MarineRecord.self, TideDayRecord.self]) }
+    static var schema: Schema { Schema([Spot.self, WeatherRecord.self, MarineRecord.self, TideDayRecord.self, CatchRecord.self]) }
     private static let logger = Logger(subsystem: "jp.tide.app", category: "AppContainer")
 
     @MainActor

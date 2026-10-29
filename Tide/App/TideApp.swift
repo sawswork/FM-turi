@@ -3,6 +3,7 @@ import SwiftUI
 
 @main
 struct TideApp: App {
+    @State private var router = AppRouter()
     @State private var location: LocationService
     @State private var conditions: ConditionsStore
     @State private var tide: TideStore
@@ -23,6 +24,7 @@ struct TideApp: App {
                 .preferredColorScheme(.dark)
         }
         .modelContainer(container)
+        .environment(router)
         .environment(location)
         .environment(conditions)
         .environment(tide)
