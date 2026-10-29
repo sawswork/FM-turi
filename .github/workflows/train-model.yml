@@ -7,15 +7,19 @@ on:
         description: "環境確認だけ行う（学習しない）"
         type: boolean
         default: false
+      epochs:
+        description: "エポック数"
+        type: number
+        default: 8
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   train:
     name: Train Core ML classifier
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -25,17 +29,32 @@ jobs:
           cache-dependency-path: ml/requirements.txt
       - name: Install dependencies
         run: pip install -r ml/requirements.txt
+      - name: Check
+        if: inputs.check_only == true
+        run: python ml/train.py --check
       - name: Train
-        run: |
-          if [[ "${{ inputs.check_only }}" == "true" ]]; then
-            python ml/train.py --check
-          else
-            python ml/train.py --output build/ml
-          fi
-      - name: Upload model
+        if: inputs.check_only != true
+        run: python ml/train.py --data ml/data --output build/ml --epochs "${{ inputs.epochs }}"
+      - name: Upload artifact
         if: inputs.check_only != true
         uses: actions/upload-artifact@v4
         with:
           name: FishClassifier
           path: build/ml
-          if-no-files-found: warn
+          if-no-files-found: ignore
+      - name: Commit model to main
+        if: inputs.check_only != true
+        shell: bash
+        run: |
+          if [[ ! -d build/ml/FishClassifier.mlpackage ]]; then
+            echo "モデルは生成されていません（学習データ不足）。"
+            exit 0
+          fi
+          rm -rf Tide/Resources/FishClassifier.mlpackage
+          cp -R build/ml/FishClassifier.mlpackage Tide/Resources/FishClassifier.mlpackage
+          cp build/ml/classes.json Tide/Resources/FishClassifier.classes.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Tide/Resources/FishClassifier.mlpackage Tide/Resources/FishClassifier.classes.json
+          git commit -m "L13: 学習済み FishClassifier.mlpackage を更新 [ios]" || exit 0
+          git push origin HEAD:main

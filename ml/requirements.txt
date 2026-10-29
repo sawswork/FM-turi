@@ -1,2 +1,6 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
 coremltools>=8.0
 numpy>=1.26
+torch>=2.3
+torchvision>=0.18
+pillow>=10.0

@@ -2,6 +2,18 @@
 
 ループごとの記録（指示書 §7 の形式）。新しいものが上。
 
+## L13 2026-10-29
+やったこと:
+- train-model.yml: ubuntu + Python（torch / torchvision / coremltools）。`ml/data/<species_id>/` の写真から MobileNetV3-Small を転移学習し、`FishClassifier.mlpackage`（クラス名=付録B の id）を生成。成果物をアップロードし、`Tide/Resources/` に main へ自動コミット（`[ios]` 付き）。データが 2 クラス未満なら何もしない
+- アプリ: 同梱モデル（FishClassifier.mlmodelc）があれば VNCoreMLRequest で候補3つ＋確度（softmax）、無ければ従来の汎用分類＋マッピング。Core ML のコード生成は無効化（名前衝突回避）
+- 確度は Catch の AI リング（選択中候補の確度）に表示（自前モデルでは実確度、汎用分類ではマッピングの重み）
+- 学習データの取り出し口（設定画面「学習用に書き出す」）は L15 で実装
+- 注: GitHub Actions 停止中のため CI 未検証。モデル未学習のためアプリは汎用分類で動く
+確認ポイント（最後に私が実機で見るところ、最大3つ）:
+- [Actions] train-model.yml を check_only=true で実行 → 緑（依存関係の確認）
+- [Catch] 写真を選ぶ → AI リングが確度分だけ橙（モデル学習後は精度が上がる）
+仕様から外れた判断: ADR-0012（学習データはオーナーが ml/data に置く。モデルは Actions が main にコミット）
+
 ## L12 2026-10-29
 やったこと:
 - 大ウィジェット（A-7 3）: 見出し、潮位曲線 318×78（現在点・時刻・目盛）、シンカー行5列とフック行4列の −/+ ステッパー（AppIntents で共有 SwiftData の在庫を直接更新、残 ≤3 / ≤5 は橙）、下段のカメラピル・図鑑・Tackle ボタン（tide://zukan, tide://tackle）
