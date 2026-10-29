@@ -1,5 +1,5 @@
-import XCTest
 @testable import TideCore
+import XCTest
 
 final class DeepLinkTests: XCTestCase {
     func testCatchHostParses() throws {

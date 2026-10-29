@@ -1,6 +1,6 @@
+@testable import Tide
 import TideCore
 import XCTest
-@testable import Tide
 
 final class AppTabTests: XCTestCase {
     func testFiveTabsInSpecOrder() {
