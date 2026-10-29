@@ -34,9 +34,12 @@ enum FishClassifier {
 
     /// 自前モデルの出力（識別子 = 付録B の id、確度 = softmax）→ 候補3つ。
     static func customCandidates(from observations: [VisionMapping.Observation]) -> [VisionMapping.Candidate] {
-        var result = observations
-            .compactMap { obs in Species.find(obs.identifier).map { VisionMapping.Candidate(species: $0, confidence: min(max(obs.confidence, 0), 1)) } }
-            .sorted { $0.confidence > $1.confidence }
+        var result: [VisionMapping.Candidate] = []
+        for observation in observations {
+            guard let species = Species.find(observation.identifier) else { continue }
+            result.append(VisionMapping.Candidate(species: species, confidence: min(max(observation.confidence, 0), 1)))
+        }
+        result.sort { $0.confidence > $1.confidence }
         result = Array(result.prefix(3))
         for fallback in VisionMapping.defaultCandidates where result.count < 3 && !result.contains(where: { $0.id == fallback.id }) {
             result.append(fallback)

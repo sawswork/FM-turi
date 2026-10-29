@@ -55,9 +55,15 @@ public enum VisionMapping {
                 }
             }
         }
-        let ranked = scores
-            .compactMap { id, score in Species.find(id).map { Candidate(species: $0, confidence: min(score, 1)) } }
-            .sorted { $0.confidence == $1.confidence ? $0.species.id < $1.species.id : $0.confidence > $1.confidence }
+        var ranked: [Candidate] = []
+        for (id, score) in scores {
+            guard let species = Species.find(id) else { continue }
+            ranked.append(Candidate(species: species, confidence: min(score, 1)))
+        }
+        ranked.sort { lhs, rhs in
+            if lhs.confidence == rhs.confidence { return lhs.species.id < rhs.species.id }
+            return lhs.confidence > rhs.confidence
+        }
         var result = Array(ranked.prefix(count))
         for fallback in defaultCandidates where result.count < count && !result.contains(where: { $0.id == fallback.id }) {
             result.append(fallback)

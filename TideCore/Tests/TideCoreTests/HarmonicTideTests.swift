@@ -36,7 +36,8 @@ final class HarmonicTideTests: XCTestCase {
         XCTAssertEqual(fitted.terms.count, 8)
         // 当てはめ期間の外でも一致する
         let future = start.addingTimeInterval(60 * 86_400 + 5000)
-        XCTAssertEqual(HarmonicTide.level(at: future, constants: fitted), HarmonicTide.level(at: future, constants: truth), accuracy: 1.5)
+        XCTAssertEqual(HarmonicTide.level(at: future, constants: fitted),
+                       HarmonicTide.level(at: future, constants: truth), accuracy: 1.5)
     }
 
     func testTooFewSamples() {
