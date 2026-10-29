@@ -10,6 +10,8 @@ L5: 釣れ率v1、リング、4条件メーター、24hバー、Detailシート�
 
 ## 既知の問題
 
+- **【要対応・オーナー】GitHub Actions が止まっている（2026-10-29 17:11 UTC〜）。** 全ジョブが「The job was not started because recent account payments have failed or your spending limit needs to be increased」で即失敗する。GitHub の Settings → Billing & plans で支払い方法か Actions の spending limit を確認すると直る。直るまで CI での検証（SwiftLint 全ルール・TideCore テスト・iOS ビルド）ができないため、以降のループは「CI 未検証」として進め、復旧後に最新コミットへ手動で CI を回して赤を直す。
+
 - 開発コンテナに Xcode/Swift がないため、SwiftUI 部分の検証は GitHub Actions（macos-latest、約3分/回）のみ。純粋ロジックは `TideCore` に置き ubuntu の `swift test` でも検証する（ADR-0002）。
 - macOS ジョブはコミットメッセージに `[ios]` を含むときだけ走る（ADR-0002）。
 - 実機では L16 まで WeatherKit が使えないため、気象は固定値モックに退避する（ADR-0003）。Detail に由来を出す。
