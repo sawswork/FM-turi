@@ -11,4 +11,5 @@ struct CatchView: View {
 
 #Preview {
     CatchView()
+        .previewEnvironment()
 }

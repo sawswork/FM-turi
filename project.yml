@@ -41,6 +41,7 @@ targets:
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
         ITSAppUsesNonExemptEncryption: false
+        NSLocationWhenInUseUsageDescription: 近くの釣り場と、その場所の潮・風・波を表示するために現在地を使います。
         CFBundleURLTypes:
           - CFBundleURLName: jp.tide.app
             CFBundleURLSchemes:

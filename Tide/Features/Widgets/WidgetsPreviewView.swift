@@ -11,4 +11,5 @@ struct WidgetsPreviewView: View {
 
 #Preview {
     WidgetsPreviewView()
+        .previewEnvironment()
 }

@@ -11,4 +11,5 @@ struct SpotsView: View {
 
 #Preview {
     SpotsView()
+        .previewEnvironment()
 }

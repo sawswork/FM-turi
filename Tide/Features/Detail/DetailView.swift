@@ -11,4 +11,5 @@ struct DetailView: View {
 
 #Preview {
     DetailView()
+        .previewEnvironment()
 }

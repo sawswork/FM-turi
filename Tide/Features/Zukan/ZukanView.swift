@@ -11,4 +11,5 @@ struct ZukanView: View {
 
 #Preview {
     ZukanView()
+        .previewEnvironment()
 }

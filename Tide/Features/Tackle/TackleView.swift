@@ -11,4 +11,5 @@ struct TackleView: View {
 
 #Preview {
     TackleView()
+        .previewEnvironment()
 }
