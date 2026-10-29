@@ -2,6 +2,21 @@
 
 ループごとの記録（指示書 §7 の形式）。新しいものが上。
 
+## L16 2026-10-29
+やったこと:
+- アプリアイコン（1024px、黒地に橙のリング 72%）
+- PrivacyInfo.xcprivacy（アプリ・ウィジェット）、WeatherKit と App Group の entitlements
+- スクリーンショット: UI テスト（5タブ）と `ci.yml` の screenshots 入力。6.9 インチ（Pro Max）シミュレータで撮って成果物に出す
+- App Store 提出物の文面 `docs/APP_STORE.md`（説明・キーワード・プライバシー・審査メモ）
+- Fastfile: API キーを一時ファイルにして `-allowProvisioningUpdates` の認証引数を明示、初回でもビルド番号が取れるように
+- docs 整備: README、`docs/OWNER_TASKS.md`（iPad の Safari だけで完了できる手順と画面別の確認ポイント）
+- 注: GitHub Actions 停止中のため L5〜L16 は CI 未検証。OWNER_TASKS の手順 0 で復旧後、最新コミットの CI を緑にする作業が残る
+確認ポイント（最後に私が実機で見るところ、最大3つ）:
+- [ホーム画面] アイコン → 黒地に橙のリング
+- [Actions] CI を screenshots=true で実行 → 成果物に 5 枚の PNG
+- [TestFlight] OWNER_TASKS の手順どおりに進めてインストールできる
+仕様から外れた判断: なし
+
 ## L15 2026-10-29
 やったこと:
 - 釣れ率 v2: 釣果の記録に保存した v1 要素点数（10 件以上）から、Create ML Tabular（MLLogisticRegressionClassifier）で係数を学び、要素ごとの配点（合計 100）に変換。Create ML が使えない環境では TideCore の同じ定式化の回帰。保存のたびに再学習。設定画面に配点と学習日時を表示、手動で学び直しも可能

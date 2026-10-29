@@ -10,6 +10,17 @@ enum AppTab: Int, CaseIterable, Identifiable, Sendable {
 
     var id: Int { rawValue }
 
+    /// UI テスト用の識別子
+    var identifier: String {
+        switch self {
+        case .home: "home"
+        case .spots: "spots"
+        case .catchFish: "catch"
+        case .zukan: "zukan"
+        case .tackle: "tackle"
+        }
+    }
+
     var icon: TideIcon {
         switch self {
         case .home: .home

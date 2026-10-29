@@ -83,6 +83,7 @@ struct CatchView: View {
                     pickerItem = nil
                     router.selectedTab = .home
                 }
+                .accessibilityIdentifier("catch.close")
                 .padding(.top, Cat.closeTop)
                 .padding(.leading, Cat.closeLeft)
                 Spacer(minLength: 0)

@@ -14,6 +14,7 @@ struct TabBarView: View {
                     item(for: tab)
                 }
                 .buttonStyle(.plain)
+                .accessibilityIdentifier("tab.\(tab.identifier)")
                 .frame(maxWidth: .infinity)
             }
         }

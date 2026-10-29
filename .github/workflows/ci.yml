@@ -4,6 +4,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      screenshots:
+        description: "5タブのスクリーンショットを撮って成果物に残す"
+        type: boolean
+        default: false
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -70,3 +75,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build and test
         run: scripts/ci-ios.sh
+      - name: Screenshots
+        if: inputs.screenshots == true
+        run: scripts/ci-screenshots.sh
+      - name: Upload screenshots
+        if: inputs.screenshots == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: build/screenshots
+          if-no-files-found: warn

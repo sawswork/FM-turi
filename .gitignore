@@ -4,6 +4,7 @@
 Tide/Info.plist
 TideTests/Info.plist
 TideWidgets/Info.plist
+TideUITests/Info.plist
 Tide/Tide.entitlements
 TideWidgets/TideWidgets.entitlements
 xcuserdata/

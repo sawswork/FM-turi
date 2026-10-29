@@ -36,6 +36,7 @@ targets:
       properties:
         com.apple.security.application-groups:
           - group.jp.tide.app
+        com.apple.developer.weatherkit: true
     info:
       path: Tide/Info.plist
       properties:
@@ -111,7 +112,30 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: jp.tide.app.tests
         GENERATE_INFOPLIST_FILE: "NO"
+  TideUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: TideUITests
+    dependencies:
+      - target: Tide
+    info:
+      path: TideUITests/Info.plist
+      properties: {}
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: jp.tide.app.uitests
+        GENERATE_INFOPLIST_FILE: "NO"
 schemes:
+  TideScreenshots:
+    build:
+      targets:
+        Tide: all
+        TideUITests: [test]
+    test:
+      config: Debug
+      targets:
+        - TideUITests
   Tide:
     build:
       targets:
