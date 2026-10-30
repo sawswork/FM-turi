@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   changes:
@@ -87,3 +87,18 @@ jobs:
           name: screenshots
           path: build/screenshots
           if-no-files-found: warn
+      - name: Commit screenshots to docs/screenshots
+        if: inputs.screenshots == true
+        shell: bash
+        run: |
+          shopt -s nullglob
+          files=(build/screenshots/*.png build/screenshots/**/*.png)
+          if (( ${#files[@]} == 0 )); then echo "PNG なし"; exit 0; fi
+          rm -rf docs/screenshots && mkdir -p docs/screenshots
+          for f in "${files[@]}"; do cp "$f" "docs/screenshots/$(basename "$f")"; done
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/screenshots
+          git commit -m "L16: スクリーンショットを更新（CI）" || exit 0
+          git pull --rebase origin main || true
+          git push origin HEAD:main
