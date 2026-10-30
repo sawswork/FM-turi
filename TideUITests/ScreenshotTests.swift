@@ -2,26 +2,43 @@ import XCTest
 
 /// 5タブのスクリーンショットを撮る（App Store 提出用）。ci.yml の workflow_dispatch（screenshots=true）で実行。
 final class ScreenshotTests: XCTestCase {
+    override func setUpWithError() throws {
+        continueAfterFailure = true
+    }
+
     @MainActor
     func testCaptureAllTabs() throws {
         let app = XCUIApplication()
         app.launchArguments += ["-notice.accepted.v1", "YES"]
+        // 位置情報などのシステムダイアログは許可して閉じる
+        addUIInterruptionMonitor(withDescription: "system alert") { alert in
+            for label in ["Allow While Using App", "Allow Once", "Allow", "OK", "許可"] {
+                let button = alert.buttons[label]
+                if button.exists {
+                    button.tap()
+                    return true
+                }
+            }
+            return false
+        }
         app.launch()
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 30))
+        app.tap() // 割り込みモニターを動かす
         let tabs = ["home", "spots", "catch", "zukan", "tackle"]
-        for tab in tabs {
+        for (index, tab) in tabs.enumerated() {
             if tab != "home" {
                 let button = app.buttons["tab.\(tab)"]
-                if button.waitForExistence(timeout: 5) { button.tap() }
+                if button.waitForExistence(timeout: 10) { button.tap() }
             }
-            sleep(2)
+            sleep(3)
             let attachment = XCTAttachment(screenshot: app.screenshot())
-            attachment.name = "\(tabs.firstIndex(of: tab).map { $0 + 1 } ?? 0)-\(tab)"
+            attachment.name = "\(index + 1)-\(tab)"
             attachment.lifetime = .keepAlways
             add(attachment)
             if tab == "catch" {
                 // Catch にはタブバーが無いので閉じるで戻る
                 let close = app.buttons["catch.close"]
-                if close.waitForExistence(timeout: 3) { close.tap() }
+                if close.waitForExistence(timeout: 5) { close.tap() }
             }
         }
     }

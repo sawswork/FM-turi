@@ -70,10 +70,12 @@ jobs:
       needs.changes.outputs.code == 'true' &&
       (github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[ios]'))
     runs-on: macos-latest
-    timeout-minutes: 25
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - name: Build and test
+        env:
+          PREFER_PRO_MAX: ${{ inputs.screenshots == true && '1' || '0' }}
         run: scripts/ci-ios.sh
       - name: Screenshots
         if: inputs.screenshots == true

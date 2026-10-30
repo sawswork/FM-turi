@@ -38,8 +38,12 @@ for runtime, devs in devices.items():
         name = dev.get("name", "")
         if not dev.get("isAvailable", False) or not name.startswith("iPhone"):
             continue
-        # Pro/Max/SE/Plus より素の iPhone を優先（軽い）
-        plain = 1 if re.fullmatch(r"iPhone \d+", name) else 0
+        # 通常は素の iPhone（軽い）。スクリーンショット時は 6.9 インチの Pro Max を優先
+        import os
+        if os.environ.get("PREFER_PRO_MAX") == "1":
+            plain = 1 if "Pro Max" in name else 0
+        else:
+            plain = 1 if re.fullmatch(r"iPhone \d+", name) else 0
         key = (version, plain, name)
         if best is None or key > best[0]:
             best = (key, dev["udid"], name)

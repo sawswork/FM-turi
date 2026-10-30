@@ -1,31 +1,29 @@
 #!/usr/bin/env bash
 # UI テストでスクリーンショットを撮り build/screenshots に PNG を書き出す（ci-ios.sh の後に実行）。
+# ci-ios.sh が起動したシミュレータ（PREFER_PRO_MAX=1 なら Pro Max）をそのまま使う。
 set -euo pipefail
 export PATH="/tmp/xcodegen/xcodegen/bin:$PATH"
-# App Store の 6.9 インチ用に Pro Max を優先（無ければ起動中の iPhone）
-UDID="$(xcrun simctl list devices available -j | python3 -c '
-import json, re, sys
-best = None
-for runtime, devs in json.load(sys.stdin)["devices"].items():
-    if "iOS" not in runtime:
-        continue
-    m = re.search(r"iOS-(\d+)-(\d+)", runtime)
-    version = (int(m.group(1)), int(m.group(2))) if m else (0, 0)
+UDID="$(xcrun simctl list devices booted -j | python3 -c '
+import json, sys
+for devs in json.load(sys.stdin)["devices"].values():
     for d in devs:
-        name = d.get("name", "")
-        if not d.get("isAvailable") or not name.startswith("iPhone"):
-            continue
-        key = (1 if "Pro Max" in name else 0, version, name)
-        if best is None or key > best[0]:
-            best = (key, d["udid"], name)
-print(best[1]); sys.stderr.write("screenshots: " + best[2] + "\n")')"
-xcrun simctl boot "$UDID" >/dev/null 2>&1 || true
+        if d.get("state") == "Booted" and d["name"].startswith("iPhone"):
+            print(d["udid"]); sys.stderr.write("screenshots: " + d["name"] + "\n"); sys.exit(0)
+sys.exit("booted iPhone simulator not found")')"
 xcrun simctl status_bar "$UDID" override --time "14:30" --batteryState charged --batteryLevel 100 --cellularBars 4 --wifiBars 3 || true
 rm -rf build/screenshots.xcresult build/screenshots
+FORMAT="cat"
+if command -v xcbeautify >/dev/null 2>&1; then
+  FORMAT="xcbeautify --renderer github-actions"
+fi
 set -o pipefail
+echo "::group::UI test"
 xcodebuild -project Tide.xcodeproj -scheme TideScreenshots -destination "id=$UDID" \
   -derivedDataPath build/DerivedData -resultBundlePath build/screenshots.xcresult \
-  -skipPackagePluginValidation -skipMacroValidation CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="" test 2>&1 | tail -40 || true
+  -skipPackagePluginValidation -skipMacroValidation CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="" \
+  -test-timeouts-enabled YES -default-test-execution-time-allowance 300 -maximum-test-execution-time-allowance 600 \
+  test 2>&1 | $FORMAT || echo "UI テストが失敗（スクリーンショットは撮れた分だけ出力）"
+echo "::endgroup::"
 mkdir -p build/screenshots
 xcrun xcresulttool export attachments --path build/screenshots.xcresult --output-path build/screenshots || true
 ls -la build/screenshots || true
