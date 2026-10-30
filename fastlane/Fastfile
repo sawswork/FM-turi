@@ -41,7 +41,7 @@ platform :ios do
       configuration: "Release",
       export_method: "app-store",
       xcargs: "#{auth_args} CURRENT_PROJECT_VERSION=#{build_number} DEVELOPMENT_TEAM=#{team_id}",
-      export_xcargs: auth_args,
+      # export の認証引数は gym が api_key から自動で付ける（二重に渡すと xcodebuild がエラー）
       export_options: {
         method: "app-store",
         signingStyle: "automatic",
