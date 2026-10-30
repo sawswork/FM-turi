@@ -40,7 +40,7 @@ https://github.com/sawswork/FM-turi/settings/secrets/actions →「New repositor
 | `ASC_KEY_P8` | 手順3-6 の .p8 の本文（複数行のまま） |
 | `TEAM_ID` | 手順1-4 の Team ID |
 
-## 5. TestFlight へアップロード
+## 5. TestFlight へアップロード（済み: 2026-10-30 にビルド 1 をアップロード。次回以降の再実行はこの手順）
 1. https://github.com/sawswork/FM-turi/actions → 左の「TestFlight」→「Run workflow」→ Branch main → Run workflow
 2. 20〜40 分待つ。緑なら成功。「スキップ」と出たら Secrets の名前を確認
 3. 赤なら、失敗したステップの赤い行をコピーして新しいセッションで「続けて」と送る

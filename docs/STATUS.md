@@ -2,13 +2,13 @@
 
 ## 現在地
 
-L16 まで完了し、最新コミットで CI が全ジョブ緑（SwiftLint・TideCore テスト 55 件・iOS シミュレータ build+test）。スクリーンショット5枚を `docs/screenshots/` に出して目視確認済み。2026-10-30。
+L16 まで完了し、最新コミットで CI が全ジョブ緑（SwiftLint・TideCore テスト 55 件・iOS シミュレータ build+test）。スクリーンショット5枚を `docs/screenshots/` に出して目視確認済み。TestFlight にビルド 1 をアップロード済み（2026-10-30）。
 
 ## 次のループ
 
 ループは残っていない。次にやること:
-1. オーナー: `docs/OWNER_TASKS.md` の手順 1〜6（Apple 側の設定・Secrets・TestFlight）。手順 0 はリポジトリ公開で解消済み
-2. 私: TestFlight の結果（§8 の修正依頼）を受けて直す
+1. オーナー: `docs/OWNER_TASKS.md` の手順 6（App Store Connect の TestFlight で内部テストに自分を追加し、iPhone にインストールして確認ポイントを見る）。手順 0〜5 は完了
+2. 私: 実機の結果（§8 の修正依頼）を受けて直す。直したら `testflight.yml` を再実行（ビルド番号は自動で +1）
 
 ## 既知の問題
 

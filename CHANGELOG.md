@@ -8,9 +8,11 @@
 - 最新コミットで SwiftLint・TideCore テスト 55 件・iOS シミュレータ build+test（Xcode 26.6 / iPhone 17）がすべて緑
 - スクリーンショット（iPhone 17 Pro Max、6.9 インチ）を CI で撮り `docs/screenshots/` に自動コミット。画面を目視して3点修正: Catch のL字枠がステータスバー分ずれて閉じるボタンと重なる → 枠を下の領域に縮めて配置、仮候補3つが同じ形 → カサゴ／アイナメ／キジハタ、Home 潮位グラフの初期スクロールを ScrollViewReader で先頭に固定
 - 「Home の初期選択が3日目になる」のはアプリではなく UI テストの中央タップが日付チップに当たっていたため → テストを修正
+- TestFlight: オーナーが Apple 側設定と Secrets を登録後、`testflight.yml` を3回で緑に。(1) export の認証引数が Fastlane の自動付与と二重 → 外す、(2) XcodeGen のターゲット既定が iPhone+iPad で App Store Connect の検証 90474（向き）に落ちる → `TARGETED_DEVICE_FAMILY=1` をターゲット側で固定。ビルド 1 をアップロード済み
 確認ポイント（最後に私が実機で見るところ、最大3つ）:
 - [Actions] CI → 4 ジョブすべて緑
 - [GitHub] docs/screenshots → Home・Catch・釣り場・図鑑・Tackle の5枚
+- [App Store Connect] TestFlight にビルド 1（処理完了後）
 仕様から外れた判断: なし
 
 ## L16 2026-10-29
