@@ -23,7 +23,8 @@ final class ScreenshotTests: XCTestCase {
         }
         app.launch()
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 30))
-        app.tap() // 割り込みモニターを動かす
+        // 割り込みモニターを動かすため、何も無い場所（上部帯の中央）をタップする
+        app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.12)).tap()
         let tabs = ["home", "spots", "catch", "zukan", "tackle"]
         for (index, tab) in tabs.enumerated() {
             if tab != "home" {
