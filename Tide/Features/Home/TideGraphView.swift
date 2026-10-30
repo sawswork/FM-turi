@@ -7,7 +7,7 @@ struct TideGraphView: View {
     @Binding var selected: Int
     var timeZone: TimeZone = Tide736.timeZone
 
-    @State private var scrolledDay: Int? = 0
+    @State private var visibleDay: Int?
 
     private var range: (min: Double, max: Double) {
         let all = days.flatMap(\.levels)
@@ -17,35 +17,42 @@ struct TideGraphView: View {
 
     var body: some View {
         TimelineView(.everyMinute) { context in
-            ScrollView(.horizontal) {
-                HStack(spacing: 0) {
-                    ForEach(Array(days.enumerated()), id: \.offset) { index, day in
-                        TideDayGraph(day: day,
-                                     isHighlighted: index == selected,
-                                     isToday: index == 0,
-                                     isLast: index == days.count - 1,
-                                     now: context.date,
-                                     range: range,
-                                     timeZone: timeZone)
-                            .id(index)
+            ScrollViewReader { proxy in
+                ScrollView(.horizontal) {
+                    HStack(spacing: 0) {
+                        ForEach(Array(days.enumerated()), id: \.offset) { index, day in
+                            TideDayGraph(day: day,
+                                         isHighlighted: index == selected,
+                                         isToday: index == 0,
+                                         isLast: index == days.count - 1,
+                                         now: context.date,
+                                         range: range,
+                                         timeZone: timeZone)
+                                .id(index)
+                        }
                     }
+                    .scrollTargetLayout()
                 }
-                .scrollTargetLayout()
+                .scrollIndicators(.hidden)
+                .scrollTargetBehavior(.viewAligned)
+                .contentMargins(.horizontal, DesignTokens.Screen.horizontalPadding, for: .scrollContent)
+                .onScrollTargetVisibilityChange(idType: Int.self, threshold: 0.6) { ids in
+                    visibleDay = ids.first
+                }
+                .onScrollPhaseChange { _, newPhase in
+                    // ユーザーのスクロールが止まったときだけ選択日に反映（初期表示や自動スクロールでは変えない）
+                    if newPhase == .idle, let visibleDay, visibleDay != selected { selected = visibleDay }
+                }
+                .onAppear {
+                    proxy.scrollTo(selected, anchor: .leading)
+                }
+                .onChange(of: selected) { _, newValue in
+                    withAnimation { proxy.scrollTo(newValue, anchor: .leading) }
+                }
             }
-            .scrollIndicators(.hidden)
-            .scrollTargetBehavior(.viewAligned)
-            .defaultScrollAnchor(.leading)
-            .scrollPosition(id: $scrolledDay)
-            .contentMargins(.horizontal, DesignTokens.Screen.horizontalPadding, for: .scrollContent)
         }
         .frame(height: DesignTokens.TideGraph.height)
         .padding(.top, DesignTokens.TideGraph.marginTop)
-        .onChange(of: selected) { _, newValue in
-            withAnimation { scrolledDay = newValue }
-        }
-        .onChange(of: scrolledDay) { _, newValue in
-            if let newValue, newValue != selected { selected = newValue }
-        }
     }
 }
 
