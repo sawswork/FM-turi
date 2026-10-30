@@ -2,7 +2,7 @@
 
 ## 現在地
 
-L16 まで完了し、最新コミットで CI が全ジョブ緑（SwiftLint・TideCore テスト 55 件・iOS シミュレータ build+test）。2026-10-30 確認。
+L16 まで完了し、最新コミットで CI が全ジョブ緑（SwiftLint・TideCore テスト 55 件・iOS シミュレータ build+test）。スクリーンショット5枚を `docs/screenshots/` に出して目視確認済み。2026-10-30。
 
 ## 次のループ
 

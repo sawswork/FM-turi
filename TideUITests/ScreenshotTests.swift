@@ -31,7 +31,7 @@ final class ScreenshotTests: XCTestCase {
                 let button = app.buttons["tab.\(tab)"]
                 if button.waitForExistence(timeout: 10) { button.tap() }
             }
-            sleep(3)
+            sleep(tab == "spots" ? 8 : 3) // 地図タイルの読み込み待ち
             let attachment = XCTAttachment(screenshot: app.screenshot())
             attachment.name = "\(index + 1)-\(tab)"
             attachment.lifetime = .keepAlways

@@ -52,7 +52,7 @@ https://github.com/sawswork/FM-turi/settings/secrets/actions →「New repositor
 4. 下の「確認ポイント」を見る。気づいたことは §8 の形式（`[画面名] 見た目|動き|データ: 何が / どうあるべきか`）で新しいセッションに送る
 
 ## 7. （任意）スクリーンショットと公開
-1. Actions →「CI」→「Run workflow」→ screenshots にチェック → Run。成果物 `screenshots` の zip をダウンロード（iPad の「ファイル」で展開）
+1. Actions →「CI」→「Run workflow」→ screenshots にチェック → Run。約 15 分後に `docs/screenshots/` に PNG が自動コミットされる（GitHub でそのまま見られる。成果物 zip もある）
 2. App Store Connect の App 情報・スクリーンショット・説明は `docs/APP_STORE.md` の文面を貼る
 
 ## 8. （任意）魚種モデルの学習

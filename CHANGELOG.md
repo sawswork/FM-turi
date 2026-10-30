@@ -6,8 +6,11 @@
 やったこと:
 - リポジトリ公開で Actions が復旧。L5〜L16 を初めてコンパイルし、赤を3回で緑にした: lint（行長・ファイル長）、VisionMapping の型推論を分割、テストの epoch 定数（1日ずれ）、Map の存在しない修飾子 `annotationTitles` を削除
 - 最新コミットで SwiftLint・TideCore テスト 55 件・iOS シミュレータ build+test（Xcode 26.6 / iPhone 17）がすべて緑
+- スクリーンショット（iPhone 17 Pro Max、6.9 インチ）を CI で撮り `docs/screenshots/` に自動コミット。画面を目視して3点修正: Catch のL字枠がステータスバー分ずれて閉じるボタンと重なる → 枠を下の領域に縮めて配置、仮候補3つが同じ形 → カサゴ／アイナメ／キジハタ、Home 潮位グラフの初期スクロールを ScrollViewReader で先頭に固定
+- 「Home の初期選択が3日目になる」のはアプリではなく UI テストの中央タップが日付チップに当たっていたため → テストを修正
 確認ポイント（最後に私が実機で見るところ、最大3つ）:
 - [Actions] CI → 4 ジョブすべて緑
+- [GitHub] docs/screenshots → Home・Catch・釣り場・図鑑・Tackle の5枚
 仕様から外れた判断: なし
 
 ## L16 2026-10-29
