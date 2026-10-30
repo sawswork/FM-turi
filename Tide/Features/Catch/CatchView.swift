@@ -67,7 +67,7 @@ struct CatchView: View {
                             .resizable()
                             .scaledToFill()
                     }
-                    CatchPhotoFrame()
+                    CatchPhotoFrame(topInset: topInset)
                 }
                 .frame(height: Cat.photoHeight)
                 .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: Cat.photoBottomRadius,

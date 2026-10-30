@@ -7,7 +7,7 @@ struct TideGraphView: View {
     @Binding var selected: Int
     var timeZone: TimeZone = Tide736.timeZone
 
-    @State private var scrolledDay: Int?
+    @State private var scrolledDay: Int? = 0
 
     private var range: (min: Double, max: Double) {
         let all = days.flatMap(\.levels)
@@ -34,6 +34,7 @@ struct TideGraphView: View {
             }
             .scrollIndicators(.hidden)
             .scrollTargetBehavior(.viewAligned)
+            .defaultScrollAnchor(.leading)
             .scrollPosition(id: $scrolledDay)
             .contentMargins(.horizontal, DesignTokens.Screen.horizontalPadding, for: .scrollContent)
         }

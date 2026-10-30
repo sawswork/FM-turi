@@ -13,8 +13,9 @@ final class CatchDraft {
     /// 撮影時刻（EXIF）か現在
     var capturedAt = Date()
     var photoLocation: GeoPoint?
-    /// 魚種候補（L7 で Vision、L6 は付録B の先頭3種）
-    var candidates: [Species] = Array(Species.all.prefix(3))
+    /// 魚種候補（写真を選ぶまでの仮置き: 形の違う3種）
+    static let placeholderCandidates: [Species] = ["kasago", "ainame", "kijihata"].compactMap(Species.find)
+    var candidates: [Species] = CatchDraft.placeholderCandidates
     var candidateConfidences: [Double] = []
     var selectedIndex = 0
     var lengthText = ""
@@ -70,7 +71,7 @@ final class CatchDraft {
         metadata = nil
         capturedAt = Date()
         photoLocation = nil
-        candidates = Array(Species.all.prefix(3))
+        candidates = Self.placeholderCandidates
         candidateConfidences = []
         selectedIndex = 0
         lengthText = ""
